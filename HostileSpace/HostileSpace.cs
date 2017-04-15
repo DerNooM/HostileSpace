@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HostileSpace
 {
-    class Program
+    class HostileSpace
     {
         static void Main(string[] args)
         {
