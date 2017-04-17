@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SFML.Audio;
+
 
 namespace HostileSpace
 {
@@ -15,6 +14,7 @@ namespace HostileSpace
         }
 
         Dictionary<String, SoundObject> sounds = new Dictionary<String, SoundObject>();
+
 
         public AudioPlayer()
         {
@@ -37,5 +37,6 @@ namespace HostileSpace
             tmp.Sound.Play();
         }
         
+
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Text;
 using SFML.System;
-using SFML.Audio;
 using SFML.Graphics;
 using HostileSpace.Utils;
 using HostileSpace.GUI;
 using System.Security.Cryptography;
+using HostileSpaceNetLib;
 using HostileSpaceNetLib.Packets;
 
 
@@ -19,6 +19,10 @@ namespace HostileSpace
 
         Texture backgroundTexture;
         Sprite backgroundSprite;
+        
+        RectangleShape statusBackground;
+        Text status;
+        Boolean showStatus = false;
 
 
         public LoginScreen(HostileSpace Game)
@@ -39,7 +43,40 @@ namespace HostileSpace
             login.SetTextOffset(45, 3);
             login.ButtonPressed += Login_ButtonPressed;
 
-            
+            statusBackground = new RectangleShape(new Vector2f(200, 30));
+            statusBackground.Position = new Vector2f((1024 / 2) - 100, 370);
+            statusBackground.FillColor = Colors.GuiA;
+
+            status = new Text("invalid password", Game.ContentManager.GetFont("Arial"), 24);
+            status.Position = new Vector2f((1024 / 2) - 90, 370);
+            status.Color = Color.Black;
+
+            Game.Client.PacketReceieved += Client_PacketReceieved;
+        }
+
+        private void Client_PacketReceieved(object sender, EventArgs e)
+        {
+            Client client = (Client)sender;
+
+            if(client.Packet.ID == PacketID.LoginResponse)
+            {
+                LoginResponse response = new LoginResponse(client.Packet);
+
+                if(response.Response == LoginResponse.Responses.AccountCreated)
+                {
+                    status.DisplayedString = "account created";
+                }
+                else if(response.Response == LoginResponse.Responses.InvalidPassword)
+                {
+                    status.DisplayedString = "invalid password";
+                }
+                else if(response.Response == LoginResponse.Responses.Accepted)
+                {
+                    Game.CurrentState = GameStates.MainScreen;
+                }
+
+                showStatus = true;
+            }
         }
 
         private void Login_ButtonPressed(object sender, EventArgs e)
@@ -80,6 +117,12 @@ namespace HostileSpace
             password.Update(Elapsed);
 
             login.Update(Elapsed);
+
+            if (!Game.Client.Connected)
+            {
+                status.DisplayedString = "not connected";
+                showStatus = true;
+            }
         }
 
         public override void Draw(Time Elapsed)
@@ -88,6 +131,12 @@ namespace HostileSpace
 
             name.Draw(Elapsed);
             password.Draw(Elapsed);
+
+            if (showStatus)
+            {
+                Game.RenderWindow.Draw(statusBackground);
+                Game.RenderWindow.Draw(status);
+            }
 
             login.Draw(Elapsed);
         }

@@ -54,13 +54,6 @@ namespace HostileSpace
         {
             switch (client.Packet.ID)
             {
-                case PacketID.LoginResponse:
-                    {
-                        LoginResponse response = new LoginResponse(client.Packet);
-
-                        Console.WriteLine(response.Response);
-                    }
-                    break;
             }
 
         }
@@ -117,6 +110,7 @@ namespace HostileSpace
         public GameStates CurrentState
         {
             get { return currentState; }
+            set { currentState = value; }
         }
 
         public PerformanceCounter Performance
