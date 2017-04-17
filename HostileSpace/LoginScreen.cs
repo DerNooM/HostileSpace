@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Text;
 using SFML.System;
+using SFML.Audio;
 using SFML.Graphics;
 using HostileSpace.Utils;
 using HostileSpace.GUI;
 using System.Security.Cryptography;
+using HostileSpaceNetLib.Packets;
+
 
 namespace HostileSpace
 {
@@ -27,12 +30,42 @@ namespace HostileSpace
             backgroundSprite = new Sprite(backgroundTexture, new IntRect(200 - 24, 0, 1024, 768));
             backgroundSprite.Position = new Vector2f(0, 0);
 
-            name = new InputField(Game, "username", (1024 / 2) - 100, 200);
-            password = new InputField(Game, "password", (1024 / 2) - 100, 270);
+            name = new InputField(Game, "username", (1024 / 2) - 125, 200, 250, 50, 10);
+            password = new InputField(Game, "password", (1024 / 2) - 125, 270, 250, 50, 10);
 
-            login = new Button(Game, "Login", (1024 / 2) - 100, 370);
+            login = new Button(Game, "Login", (1024 / 2) - 100, 370, 200, 50);
+            login.ButtonPressed += Login_ButtonPressed;
+
+            
         }
 
+        private void Login_ButtonPressed(object sender, EventArgs e)
+        {
+            if(Game.Client.Connected)
+            {
+                if (Username.Length >= 3)
+                {
+                    if (password.Text != "")
+                    {
+                        Game.AudioPlayer.PlaySound("GUI_CLICK");
+
+                        LoginRequest request = new LoginRequest(
+                        Username,
+                        Password);
+                           
+                        Game.Client.BeginSend(request.Packet);
+                    }
+                }
+                else
+                {
+                    Game.AudioPlayer.PlaySound("GUI_ERROR");
+                }
+            }
+            else
+            {
+                Game.AudioPlayer.PlaySound("GUI_ERROR");
+            }
+        }
 
         public override void Update(Time Elapsed)
         {

@@ -9,40 +9,54 @@ namespace HostileSpace.GUI
 {
     class InputField : GameObject
     {
-        Texture texture;
-        Sprite sprite;
-
+        RectangleShape rectangle;
         IntRect position;
 
-        Font font;
         Text text;
 
+        Int32 maxChars;
         Boolean active = false;
-
         Boolean firstActive = false;
 
-        public InputField(HostileSpace Game, String Text, Int32 X, Int32 Y)
+
+        public InputField(HostileSpace Game, String Text, Int32 X, Int32 Y, Int32 Height, Int32 Width, Int32 MaxChars)
             : base(Game)
         {
-            texture = new Texture("graphics/gui/inputfield.png");
-            texture.Smooth = true;
+            rectangle = new RectangleShape(new Vector2f(Height, Width));
+            rectangle.Position = new Vector2f(X, Y);
+            rectangle.OutlineColor = Color.Black;
+            rectangle.FillColor = Colors.GuiA;
+            rectangle.OutlineThickness = 4;
 
-            sprite = new Sprite(texture);
-            sprite.Position = new Vector2f(X, Y);
+            position = new IntRect(X, Y, Height, Width);
 
-            position = new IntRect((Vector2i)sprite.Position, new Vector2i(200, 50));
 
-            font = new Font("graphics/arial.ttf");
-
-            text = new Text(Text, font, 24);
+            text = new Text(Text, Game.ContentManager.GetFont("Arial"), 24);
             text.Color = Color.Black;
-            text.Position = new Vector2f(X + 20, Y + 9);
+            text.Position = new Vector2f(X + 10, Y + 9);
 
+            maxChars = MaxChars;
 
             Game.MouseState.LeftPressed += MouseState_LeftPressed;
             Game.KeyboardSate.KeyPressed += KeyboardSate_KeyPressed;
             Game.KeyboardSate.BackspacePressed += KeyboardSate_BackspacePressed;
             Game.KeyboardSate.SpacePressed += KeyboardSate_SpacePressed;
+        }
+        
+
+        public override void Update(Time Elapsed)
+        {
+        }
+
+        public override void Draw(Time Elapsed)
+        {
+            Game.RenderWindow.Draw(rectangle);
+            Game.RenderWindow.Draw(text);
+        }
+
+        public void SetTextOffset(Int32 X, Int32 Y)
+        {
+            text.Position = new Vector2f(position.Left + X, position.Top + Y);
         }
 
         private void KeyboardSate_SpacePressed(object sender, EventArgs e)
@@ -50,9 +64,15 @@ namespace HostileSpace.GUI
             if (!active)
                 return;
 
-            if (text.DisplayedString.Length < 12)
+            if (text.DisplayedString.Length < maxChars)
             {
-                text.DisplayedString += " ";
+                Console.WriteLine(text.DisplayedString.Length);
+
+                if (text.DisplayedString.Length > 0)
+                {
+                    if (text.DisplayedString[text.DisplayedString.Length - 1] != ' ')
+                        text.DisplayedString += " ";
+                }
             }
         }
 
@@ -73,20 +93,10 @@ namespace HostileSpace.GUI
             if (!active)
                 return;
 
-            if (text.DisplayedString.Length < 12)
+            if (text.DisplayedString.Length < maxChars)
             {
                 text.DisplayedString += e.Char;
             }
-        }
-
-        public override void Update(Time Elapsed)
-        {
-        }
-
-        public override void Draw(Time Elapsed)
-        {
-            Game.RenderWindow.Draw(sprite);
-            Game.RenderWindow.Draw(text);
         }
 
         private void MouseState_LeftPressed(object sender, EventArgs e)
@@ -95,7 +105,7 @@ namespace HostileSpace.GUI
             {
                 active = true;
 
-                sprite.Color = Color.Cyan;
+                rectangle.FillColor = Colors.GuiB;
 
                 if (!firstActive)
                 {
@@ -107,7 +117,7 @@ namespace HostileSpace.GUI
             {
                 active = false;
 
-                sprite.Color = Color.White;
+                rectangle.FillColor = Colors.GuiA;
             }
         }
 
