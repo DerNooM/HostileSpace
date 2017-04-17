@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Timers;
 using SFML.System;
-using HostileSpaceNetLib;
+using SFML.Graphics;
 using HostileSpaceNetLib.Packets;
 
 
@@ -20,9 +21,27 @@ namespace HostileSpace.Utils
 
         Int32 ping = 0;
 
+        RectangleShape rectangle;
+        Text fpsText;
+        Text pingText;
+
         public PerformanceCounter(HostileSpace Game)
             : base(Game)
         {
+            rectangle = new RectangleShape(new Vector2f(98, 50));
+            rectangle.Position = new Vector2f(1024-100, 2);
+            rectangle.OutlineColor = Color.Black;
+            rectangle.FillColor = Colors.GuiA;
+            rectangle.OutlineThickness = 2;
+
+            fpsText = new Text("fps: 9999", Game.ContentManager.GetFont("Arial"), 16);
+            fpsText.Color = Color.Black;
+            fpsText.Position = new Vector2f(1024 - 100 + 11, 4);
+
+            pingText = new Text("ping: 9999", Game.ContentManager.GetFont("Arial"), 16);
+            pingText.Color = Color.Black;
+            pingText.Position = new Vector2f(1024 - 100 + 5, 24);
+
             Game.Client.PacketReceieved += Client_PacketReceieved;
         }
 
@@ -34,7 +53,6 @@ namespace HostileSpace.Utils
                 lock (syncRoot)
                 {
                     pingcounter = pingClock.Restart();
-
                     ping = pingcounter.AsMilliseconds();
                 }
             }
@@ -58,10 +76,20 @@ namespace HostileSpace.Utils
 
                 lock (syncRoot)
                 {
-                    pingClock.Restart();
+                    pingcounter = pingClock.Restart();
                 }
 
+                fpsText.DisplayedString = "fps: " + FPS;
+                pingText.DisplayedString = "ping: " + Ping;
+
             }
+        }
+
+        public override void Draw(Time Elapsed)
+        {
+            Game.RenderWindow.Draw(rectangle);
+            Game.RenderWindow.Draw(fpsText);
+            Game.RenderWindow.Draw(pingText);
         }
 
 

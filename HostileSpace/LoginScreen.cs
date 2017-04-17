@@ -30,10 +30,13 @@ namespace HostileSpace
             backgroundSprite = new Sprite(backgroundTexture, new IntRect(200 - 24, 0, 1024, 768));
             backgroundSprite.Position = new Vector2f(0, 0);
 
-            name = new InputField(Game, "username", (1024 / 2) - 125, 200, 250, 50, 10);
-            password = new InputField(Game, "password", (1024 / 2) - 125, 270, 250, 50, 10);
+            name = new InputField(Game, "username", (1024 / 2) - 100, 200, 200, 30, 10);
+            name.SetTextOffset(6, 3);
+            password = new InputField(Game, "password", (1024 / 2) - 100, 250, 200, 30, 10);
+            password.SetTextOffset(6, 3);
 
-            login = new Button(Game, "Login", (1024 / 2) - 100, 370, 200, 50);
+            login = new Button(Game, "Login", (1024 / 2) - 75, 320, 150, 30);
+            login.SetTextOffset(45, 3);
             login.ButtonPressed += Login_ButtonPressed;
 
             
@@ -54,6 +57,10 @@ namespace HostileSpace
                         Password);
                            
                         Game.Client.BeginSend(request.Packet);
+                    }
+                    else
+                    {
+                        Game.AudioPlayer.PlaySound("GUI_ERROR");
                     }
                 }
                 else

@@ -31,7 +31,7 @@ namespace HostileSpace.GUI
             position = new IntRect(X, Y, Height, Width);
 
 
-            text = new Text(Text, Game.ContentManager.GetFont("Arial"), 24);
+            text = new Text(Text, Game.ContentManager.GetFont("Arial"), 20);
             text.Color = Color.Black;
             text.Position = new Vector2f(X + 10, Y + 9);
 

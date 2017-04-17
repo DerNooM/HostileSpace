@@ -49,6 +49,7 @@ namespace HostileSpace
             client.Connect(IPAddress.Loopback);
         }
 
+
         private void Client_PacketReceieved(object sender, EventArgs e)
         {
             switch (client.Packet.ID)
@@ -98,6 +99,8 @@ namespace HostileSpace
                     }
                     break;
             }
+
+            performanceCounter.Draw(Elapsed);
         }
 
         private void RenderWindow_Closed(object sender, EventArgs e)
