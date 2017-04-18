@@ -21,6 +21,7 @@ SFML www.sfml-dev.org
 
 #sfml irc for the help and ideas.
 
+MillionthVector http://millionthvector.blogspot.de
 
 Iwan Gabovitch http://opengameart.org/users/qubodup
 
