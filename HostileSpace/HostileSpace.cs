@@ -21,9 +21,10 @@ namespace HostileSpace
         ContentManager contentManager = new ContentManager();
         AudioPlayer audioPlayer = new AudioPlayer();
 
-        GameStates currentState = GameStates.Login;
+        GameStates currentState = GameStates.GameScreen;
 
         LoginScreen loginScreen;
+        GameScreen gameScreen;
 
         Client client = new Client();
 
@@ -44,6 +45,7 @@ namespace HostileSpace
             musicPlayer = new MusicPlayer(this);
 
             loginScreen = new LoginScreen(this);
+            gameScreen = new GameScreen(this);
 
             client.PacketReceieved += Client_PacketReceieved;
             client.Connect(IPAddress.Loopback);
@@ -72,6 +74,12 @@ namespace HostileSpace
                         loginScreen.Update(Elapsed);
                     }
                     break;
+
+                case GameStates.GameScreen:
+                    {
+                        gameScreen.Update(Elapsed);
+                    }
+                    break;
             }
 
 
@@ -89,6 +97,12 @@ namespace HostileSpace
                 case GameStates.Login:
                     {
                         loginScreen.Draw(Elapsed);
+                    }
+                    break;
+
+                case GameStates.GameScreen:
+                    {
+                        gameScreen.Draw(Elapsed);
                     }
                     break;
             }

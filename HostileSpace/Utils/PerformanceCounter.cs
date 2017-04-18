@@ -29,18 +29,18 @@ namespace HostileSpace.Utils
             : base(Game)
         {
             rectangle = new RectangleShape(new Vector2f(98, 50));
-            rectangle.Position = new Vector2f(1024-100, 2);
+            rectangle.Position = new Vector2f(1024-98, 0);
             rectangle.OutlineColor = Color.Black;
             rectangle.FillColor = Colors.GuiA;
-            rectangle.OutlineThickness = 2;
+            rectangle.OutlineThickness = 4;
 
             fpsText = new Text("fps: 9999", Game.ContentManager.GetFont("Arial"), 16);
             fpsText.Color = Color.Black;
-            fpsText.Position = new Vector2f(1024 - 100 + 11, 4);
+            fpsText.Position = new Vector2f(1024 - 100 + 13, 4);
 
             pingText = new Text("ping: 9999", Game.ContentManager.GetFont("Arial"), 16);
             pingText.Color = Color.Black;
-            pingText.Position = new Vector2f(1024 - 100 + 5, 24);
+            pingText.Position = new Vector2f(1024 - 100 + 7, 24);
 
             Game.Client.PacketReceieved += Client_PacketReceieved;
         }

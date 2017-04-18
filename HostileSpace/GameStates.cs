@@ -4,6 +4,7 @@
     {
         Login,
         MainScreen,
+        GameScreen,
         Credits
     }
 }
