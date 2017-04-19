@@ -21,12 +21,12 @@ namespace HostileSpace
 
         Single rotation = 0;
 
-        FloatRect destinationRect = new FloatRect(0, 0, 1, 1);
-
-        Single maxSpeed = 0.2f;
+        Single maxSpeed = 0.3f;
         Single turnRate = 0.002f;
-        Single currentSpeed = 0;
+        Single acceleration = 0;
 
+        Healthbar shield;
+        Healthbar armor;
 
         public SpaceShip(HostileSpace Game)
             : base(Game)
@@ -36,6 +36,10 @@ namespace HostileSpace
             ship.Texture = Game.ContentManager.GetTexture("Ship01");
             spriteOffset = new Vector2f(ship.Texture.Size.X / 2, ship.Texture.Size.Y / 2);
             ship.Origin = spriteOffset;
+
+            shield = new Healthbar(Game, new Vector2f(0, 90));
+            armor = new Healthbar(Game, new Vector2f(0, 70));
+            armor.FillColor = Color.Blue;
         }
 
 
@@ -62,18 +66,35 @@ namespace HostileSpace
             return angle * (180.0f / (Single)Math.PI);
         }
 
+        private static Single GetDistance(Vector2f A, Vector2f B)
+        {
+            return (Single)Math.Sqrt(Math.Pow((B.X - A.X), 2) + Math.Pow((B.Y - A.Y), 2));
+        }
+
 
         public override void Update(Time Elapsed)
         {
-            destinationRect.Left = destination.X;
-            destinationRect.Top = destination.Y;
-
-            if (ship.GetGlobalBounds().Intersects(destinationRect))
+            if (GetDistance(ship.Position, destination) < 50)
             {
-                currentSpeed = 0;
+                acceleration = 0;
                 return;
             }
 
+
+            if (GetDistance(ship.Position, destination) > 200)
+            {
+                if (acceleration < 1.0f)
+                {
+                    acceleration += 0.0005f * Elapsed.AsMilliseconds();
+                }
+            }
+            else
+            {
+                if (acceleration > 0.2f)
+                {
+                    acceleration -= 0.0008f * Elapsed.AsMilliseconds();
+                }
+            }
 
 
             direction = destination - position;
@@ -84,18 +105,30 @@ namespace HostileSpace
             ship.Rotation -= (turnRate * Elapsed.AsMilliseconds()) * ShortestRotation(rotation, ship.Rotation);
 
 
-            direction.X = (Single)Math.Sin(DegreeToRadian(ship.Rotation + 90)) * currentSpeed * Elapsed.AsMilliseconds();
-            direction.Y = -(Single)Math.Cos(DegreeToRadian(ship.Rotation + 90)) * currentSpeed * Elapsed.AsMilliseconds();
+            direction.X = (Single)Math.Sin(DegreeToRadian(ship.Rotation + 90)) * maxSpeed * acceleration * Elapsed.AsMilliseconds();
+            direction.Y = -(Single)Math.Cos(DegreeToRadian(ship.Rotation + 90)) * maxSpeed * acceleration * Elapsed.AsMilliseconds();
 
 
             position += direction;
             ship.Position = position;
+
+            shield.Position = ship.Position;
+            shield.Rotation = ship.Rotation;
+            shield.Update(Elapsed);
+
+            armor.Position = ship.Position;
+            armor.Rotation = ship.Rotation;
+            armor.Update(Elapsed);
         }
 
+
+        
         
         public override void Draw(Time Elapsed)
         {
             Game.RenderWindow.Draw(ship);
+            shield.Draw(Elapsed);
+            armor.Draw(Elapsed);
         }
 
 

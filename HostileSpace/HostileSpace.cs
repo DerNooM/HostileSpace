@@ -44,7 +44,8 @@ namespace HostileSpace
             keyboardState = new KeyboardState(this);
             musicPlayer = new MusicPlayer(this);
 
-            loginScreen = new LoginScreen(this);
+            //loginScreen; = new LoginScreen(this);
+            loginScreen = null;
             gameScreen = new GameScreen(this);
 
             client.PacketReceieved += Client_PacketReceieved;
@@ -81,8 +82,6 @@ namespace HostileSpace
                     }
                     break;
             }
-
-
 
             RenderWindow.SetTitle("current music: " + musicPlayer.GetCurrentTitle + "  -  FPS: " + performanceCounter.FPS + "  - ping: " + performanceCounter.Ping);
 
@@ -173,7 +172,7 @@ namespace HostileSpace
                 game.RenderWindow.DispatchEvents();
                 game.Update(elapsed);
 
-                game.RenderWindow.Clear(Color.Blue);
+                game.RenderWindow.Clear(Color.Black);
                 game.Draw(elapsed);
                 game.RenderWindow.Display();
             }

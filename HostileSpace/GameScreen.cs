@@ -21,7 +21,7 @@ namespace HostileSpace
 
 
         Sprite background;
-
+        float zoom = 1;
 
         public GameScreen(HostileSpace Game)
             : base(Game)
@@ -29,6 +29,7 @@ namespace HostileSpace
             miniMap = new MiniMap(Game);
             shipA = new SpaceShip(Game);
             shipA.Position = new Vector2f(100, 200);
+            shipA.Destination = shipA.Position;
 
             Game.MouseState.LeftPressed += MouseState_LeftPressed;
 
@@ -36,8 +37,30 @@ namespace HostileSpace
             shipB.Position = new Vector2f(500,500);
 
             view = Game.RenderWindow.DefaultView;
-
+            view.Zoom(1.5f);
             background = new Sprite(Game.ContentManager.GetTexture("Background01"));
+
+            Game.RenderWindow.MouseWheelMoved += RenderWindow_MouseWheelMoved;
+        }
+
+        private void RenderWindow_MouseWheelMoved(object sender, SFML.Window.MouseWheelEventArgs e)
+        {
+            if(e.Delta == 1)
+            {
+                if (zoom < 1.5f)
+                {
+                    zoom += 0.1f;
+                    view.Zoom(1.1f);
+                }
+            }
+            if (e.Delta == -1)
+            {
+                if (zoom > 0.5f)
+                {
+                    zoom -= 0.1f;
+                    view.Zoom(0.9f);
+                }
+            }
         }
 
         private void MouseState_LeftPressed(object sender, EventArgs e)
