@@ -2,7 +2,7 @@
 {
     public enum GameStates
     {
-        Login,
+        LoginScreen,
         MainScreen,
         GameScreen,
         Credits

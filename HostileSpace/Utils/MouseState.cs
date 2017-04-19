@@ -50,9 +50,9 @@ namespace HostileSpace.Utils
             get { return positionRect; }
         }
 
-        public Vector2i PositionVector
+        public Vector2f PositionVector
         {
-            get { return positionVector; }
+            get { return (Vector2f)positionVector; }
         }
 
 

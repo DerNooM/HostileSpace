@@ -14,6 +14,9 @@ namespace HostileSpace
         public ContentManager()
         {
             fonts.Add("Arial", new Font("graphics/fonts/arial.ttf"));
+
+            textures.Add("Background01", new Texture("graphics/backgrounds/large_web.jpg"));
+            textures.Add("Ship01", new Texture("graphics/ships/F5S4.png"));
         }
 
 

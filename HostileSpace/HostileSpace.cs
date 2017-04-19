@@ -69,7 +69,7 @@ namespace HostileSpace
 
             switch (currentState)
             {
-                case GameStates.Login:
+                case GameStates.LoginScreen:
                     {
                         loginScreen.Update(Elapsed);
                     }
@@ -94,7 +94,7 @@ namespace HostileSpace
         {
             switch (currentState)
             {
-                case GameStates.Login:
+                case GameStates.LoginScreen:
                     {
                         loginScreen.Draw(Elapsed);
                     }
