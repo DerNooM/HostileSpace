@@ -4,7 +4,7 @@ using SFML.Window;
 
 namespace HostileSpace.Utils
 {
-    class KeyboardState : GameObject
+    class KeyboardState : GameComponent
     {
 
 

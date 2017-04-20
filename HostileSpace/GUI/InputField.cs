@@ -7,7 +7,7 @@ using HostileSpace.Utils;
 
 namespace HostileSpace.GUI
 {
-    class InputField : GameObject
+    class InputField : GameComponent
     {
         RectangleShape rectangle;
         IntRect position;

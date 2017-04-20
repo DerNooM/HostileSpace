@@ -10,7 +10,7 @@ using HostileSpaceNetLib.Packets;
 
 namespace HostileSpace
 {
-    class MiniMap : GameObject
+    class MiniMap : GameComponent
     {
         RectangleShape background;
 

@@ -6,7 +6,7 @@ using HostileSpace.Utils;
 
 namespace HostileSpace.GUI
 {
-    class Button : GameObject
+    class Button : GameComponent
     {
         RectangleShape rectangle;
         IntRect position;

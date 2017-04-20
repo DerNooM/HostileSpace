@@ -10,7 +10,7 @@ using HostileSpaceNetLib.Packets;
 
 namespace HostileSpace
 {
-    class Healthbar : GameObject
+    class Healthbar : GameComponent
     {
         RectangleShape over = new RectangleShape(new Vector2f(100, 10));
         RectangleShape fill = new RectangleShape(new Vector2f(100, 10));

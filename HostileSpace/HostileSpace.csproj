@@ -59,12 +59,14 @@
   <ItemGroup>
     <Compile Include="AudioPlayer.cs" />
     <Compile Include="ContentManager.cs" />
+    <Compile Include="GameComponent.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="GameStates.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\InputField.cs" />
     <Compile Include="Healthbar.cs" />
     <Compile Include="HostileSpace.cs" />
+    <Compile Include="IGameComponent.cs" />
     <Compile Include="LoginScreen.cs" />
     <Compile Include="MiniMap.cs" />
     <Compile Include="MusicPlayer.cs" />
@@ -74,7 +76,6 @@
     <Compile Include="Utils\KeyboardState.cs" />
     <Compile Include="Utils\MouseState.cs" />
     <Compile Include="Utils\PerformanceCounter.cs" />
-    <Compile Include="Utils\GameObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -138,6 +139,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Screens\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

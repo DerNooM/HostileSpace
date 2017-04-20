@@ -7,7 +7,7 @@ using HostileSpace.Utils;
 
 namespace HostileSpace
 {
-    class MusicPlayer : GameObject
+    class MusicPlayer : GameComponent
     {
         Music music;
 

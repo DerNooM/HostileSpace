@@ -6,7 +6,7 @@ using SFML.System;
 
 namespace HostileSpace.Utils
 {
-    class MouseState : GameObject
+    class MouseState : GameComponent
     {
         IntRect positionRect = new IntRect(0, 0, 1, 1);
         Vector2i positionVector = new Vector2i();

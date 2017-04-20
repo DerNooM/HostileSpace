@@ -21,7 +21,7 @@ namespace HostileSpace
         ContentManager contentManager = new ContentManager();
         AudioPlayer audioPlayer = new AudioPlayer();
 
-        GameStates currentState = GameStates.GameScreen;
+        GameStates currentState = GameStates.LoginScreen;
 
         LoginScreen loginScreen;
         GameScreen gameScreen;
@@ -44,22 +44,12 @@ namespace HostileSpace
             keyboardState = new KeyboardState(this);
             musicPlayer = new MusicPlayer(this);
 
-            //loginScreen; = new LoginScreen(this);
-            loginScreen = null;
-            gameScreen = new GameScreen(this);
+            loginScreen = new LoginScreen(this);
+            //gameScreen = new GameScreen(this);
 
-            client.PacketReceieved += Client_PacketReceieved;
             client.Connect(IPAddress.Loopback);
         }
 
-
-        private void Client_PacketReceieved(object sender, EventArgs e)
-        {
-            switch (client.Packet.ID)
-            {
-            }
-
-        }
 
         public void Update(Time Elapsed)
         {
@@ -123,7 +113,15 @@ namespace HostileSpace
         public GameStates CurrentState
         {
             get { return currentState; }
-            set { currentState = value; }
+            set
+            {
+                currentState = value;
+                if(currentState == GameStates.GameScreen  )
+                {                 
+                    gameScreen = new GameScreen(this);
+                    loginScreen = null;
+                }
+            }
         }
 
         public PerformanceCounter Performance

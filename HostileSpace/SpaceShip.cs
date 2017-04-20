@@ -10,7 +10,7 @@ using HostileSpaceNetLib.Packets;
 
 namespace HostileSpace
 {
-    class SpaceShip : GameObject
+    class SpaceShip : GameComponent
     {
         Sprite ship;
         Vector2f spriteOffset;
@@ -71,15 +71,21 @@ namespace HostileSpace
             return (Single)Math.Sqrt(Math.Pow((B.X - A.X), 2) + Math.Pow((B.Y - A.Y), 2));
         }
 
+        public void SetData(UpdateShip.ShipData Data)
+        {
+            position = Data.Position;
+            rotation = Data.Rotation;
+            destination = Data.Destination;
+        }
 
         public override void Update(Time Elapsed)
         {
-            if (GetDistance(ship.Position, destination) < 50)
+
+            /*if (GetDistance(ship.Position, destination) < 50)
             {
                 acceleration = 0;
                 return;
             }
-
 
             if (GetDistance(ship.Position, destination) > 200)
             {
@@ -96,6 +102,14 @@ namespace HostileSpace
                 }
             }
 
+            if(ship.Rotation >= 360)
+            {
+                ship.Rotation = 0;
+            }
+            if (ship.Rotation <= -360)
+            {
+                ship.Rotation = 0;
+            }
 
             direction = destination - position;
             rotation = (float)Math.Atan2(direction.Y, direction.X);
@@ -104,13 +118,16 @@ namespace HostileSpace
 
             ship.Rotation -= (turnRate * Elapsed.AsMilliseconds()) * ShortestRotation(rotation, ship.Rotation);
 
-
-            direction.X = (Single)Math.Sin(DegreeToRadian(ship.Rotation + 90)) * maxSpeed * acceleration * Elapsed.AsMilliseconds();
-            direction.Y = -(Single)Math.Cos(DegreeToRadian(ship.Rotation + 90)) * maxSpeed * acceleration * Elapsed.AsMilliseconds();
-
+            direction.Y = (Single)Math.Sin(DegreeToRadian(ship.Rotation)) * maxSpeed * acceleration * Elapsed.AsMilliseconds();
+            direction.X = (Single)Math.Cos(DegreeToRadian(ship.Rotation)) * maxSpeed * acceleration * Elapsed.AsMilliseconds();
 
             position += direction;
             ship.Position = position;
+            */
+
+            ship.Position = position;
+            ship.Rotation = rotation;
+
 
             shield.Position = ship.Position;
             shield.Rotation = ship.Rotation;

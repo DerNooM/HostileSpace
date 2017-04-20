@@ -7,7 +7,7 @@ using HostileSpaceNetLib.Packets;
 
 namespace HostileSpace.Utils
 {
-    class PerformanceCounter : GameObject
+    class PerformanceCounter : GameComponent
     {
         Time second = Time.FromMilliseconds(1000);
         Time elapsed = Time.Zero;

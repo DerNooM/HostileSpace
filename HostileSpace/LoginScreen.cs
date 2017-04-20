@@ -11,7 +11,7 @@ using HostileSpaceNetLib.Packets;
 
 namespace HostileSpace
 {
-    class LoginScreen : GameObject
+    class LoginScreen : GameComponent
     {
         InputField name;
         InputField password;
@@ -72,7 +72,7 @@ namespace HostileSpace
                 }
                 else if(response.Response == LoginResponse.Responses.Accepted)
                 {
-                    Game.CurrentState = GameStates.MainScreen;
+                    Game.CurrentState = GameStates.GameScreen;
                 }
 
                 showStatus = true;
