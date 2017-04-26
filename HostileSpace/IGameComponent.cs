@@ -1,13 +1,14 @@
-﻿using SFML.System;
-
+﻿using System;
+using SFML.System;
+using SFML.Graphics;
 
 namespace HostileSpace
 {
     interface IGameComponent
     {
-        HostileSpace Game { get; }
+        void Update(Int32 Elapsed);
+        void Draw(RenderWindow Window);
 
-        void Update(Time Elapsed);
-        void Draw(Time Elapsed);
+        HostileSpace Game { get; }
     }
 }

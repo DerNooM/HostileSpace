@@ -4,7 +4,7 @@ using SFML.Graphics;
 using SFML.System;
 
 
-namespace HostileSpace.Utils
+namespace HostileSpace.Input
 {
     class MouseState : GameComponent
     {
@@ -14,6 +14,8 @@ namespace HostileSpace.Utils
         Boolean leftPressed = false;
         Boolean rightPressed = false;
 
+        Boolean leftClick = false;
+        Boolean rightClick = false;
 
         public MouseState(HostileSpace Game)
             : base(Game)
@@ -21,29 +23,29 @@ namespace HostileSpace.Utils
         }
 
 
-        public override void Update(Time Elapsed)
+        public override void Update(Int32 Elapsed)
         {
             positionVector = Mouse.GetPosition(Game.RenderWindow);
             positionRect.Left = positionVector.X;
             positionRect.Top = positionVector.Y;
 
+            leftClick = false;
+            rightClick = false;
+
             if (leftPressed && !Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                LeftPressed?.Invoke(this, null);
+                leftClick = true;
             }
 
             if (rightPressed && !Mouse.IsButtonPressed(Mouse.Button.Right))
             {
-                RightPressed?.Invoke(this, null);
+                rightClick = true;
             }
 
             leftPressed = Mouse.IsButtonPressed(Mouse.Button.Left);
             rightPressed = Mouse.IsButtonPressed(Mouse.Button.Right);
         }
 
-
-        public event EventHandler LeftPressed;
-        public event EventHandler RightPressed;
 
         public IntRect PositionRect
         {
@@ -54,6 +56,10 @@ namespace HostileSpace.Utils
         {
             get { return (Vector2f)positionVector; }
         }
+
+        public event EventHandler LeftClick;
+
+        public event EventHandler RightClick;
 
 
     }

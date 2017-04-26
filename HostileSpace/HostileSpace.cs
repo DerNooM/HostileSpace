@@ -4,9 +4,8 @@ using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
 using HostileSpace.Utils;
-using HostileSpaceNetLib;
-using HostileSpaceNetLib.Packets;
-
+using HostileSpace.Screens;
+using HostileSpace.Input;
 
 namespace HostileSpace
 {
@@ -14,19 +13,18 @@ namespace HostileSpace
     {
         RenderWindow renderWindow;
 
-        PerformanceCounter performanceCounter;
+        Stats stats;
+        
         MouseState mouseState;
         KeyboardState keyboardState;
         MusicPlayer musicPlayer;
         ContentManager contentManager = new ContentManager();
         AudioPlayer audioPlayer = new AudioPlayer();
 
-        GameStates currentState = GameStates.LoginScreen;
+        Background background;
 
-        LoginScreen loginScreen;
-        GameScreen gameScreen;
+        IGameComponent currentScreen;
 
-        Client client = new Client();
 
 
         public HostileSpace()
@@ -36,68 +34,52 @@ namespace HostileSpace
 
             renderWindow = new RenderWindow(new VideoMode(1024, 768), "Hostile Space", Styles.Titlebar | Styles.Close, settings);
 
-            renderWindow.SetVerticalSyncEnabled(true);
+            renderWindow.SetVerticalSyncEnabled(false);
             renderWindow.Closed += RenderWindow_Closed;
 
-            performanceCounter = new PerformanceCounter(this);
+            stats = new Stats(this);
+
             mouseState = new MouseState(this);
             keyboardState = new KeyboardState(this);
             musicPlayer = new MusicPlayer(this);
 
-            loginScreen = new LoginScreen(this);
-            //gameScreen = new GameScreen(this);
+            background = new Background(this);
 
-            client.Connect(IPAddress.Loopback);
+
+
         }
 
 
-        public void Update(Time Elapsed)
+        public void Update(Int32 Elapsed)
         {
-            performanceCounter.Update(Elapsed);
+            stats.Update(Elapsed);
             mouseState.Update(Elapsed);
-
+            keyboardState.Update(Elapsed);
             musicPlayer.Update(Elapsed);
 
-            switch (currentState)
-            {
-                case GameStates.LoginScreen:
-                    {
-                        loginScreen.Update(Elapsed);
-                    }
-                    break;
+            background.Update(Elapsed);
 
-                case GameStates.GameScreen:
-                    {
-                        gameScreen.Update(Elapsed);
-                    }
-                    break;
-            }
 
-            RenderWindow.SetTitle("current music: " + musicPlayer.GetCurrentTitle + "  -  FPS: " + performanceCounter.FPS + "  - ping: " + performanceCounter.Ping);
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
-                renderWindow.Close();
+            RenderWindow.SetTitle("fps: " + stats.FPS);
         }
 
-        public void Draw(Time Elapsed)
+        Image tmp;
+        public void Draw()
         {
-            switch (currentState)
+            background.Draw(renderWindow);
+
+
+
+            if (keyboardState.F12Pressed)
             {
-                case GameStates.LoginScreen:
-                    {
-                        loginScreen.Draw(Elapsed);
-                    }
-                    break;
+                tmp = renderWindow.Capture();
 
-                case GameStates.GameScreen:
-                    {
-                        gameScreen.Draw(Elapsed);
-                    }
-                    break;
+                tmp.SaveToFile("screenshot.png");
+                Console.WriteLine("screenshot");
             }
-
-            performanceCounter.Draw(Elapsed);
         }
+
 
         private void RenderWindow_Closed(object sender, EventArgs e)
         {
@@ -110,23 +92,20 @@ namespace HostileSpace
             get { return renderWindow; }
         }
 
-        public GameStates CurrentState
+        public Background Background
         {
-            get { return currentState; }
-            set
-            {
-                currentState = value;
-                if(currentState == GameStates.GameScreen  )
-                {                 
-                    gameScreen = new GameScreen(this);
-                    loginScreen = null;
-                }
-            }
+            get { return background; }
         }
 
-        public PerformanceCounter Performance
+        public IGameComponent CurrentScreen
         {
-            get { return performanceCounter; }
+            get { return currentScreen; }
+            set { currentScreen = value; }
+        }
+
+        public Stats Stats
+        {
+            get { return stats; }
         }
 
         public MouseState MouseState
@@ -139,10 +118,6 @@ namespace HostileSpace
             get { return keyboardState; }
         }
 
-        public Client Client
-        {
-            get { return client; }
-        }
 
         public ContentManager ContentManager
         {
@@ -168,10 +143,10 @@ namespace HostileSpace
                 elapsed = clock.Restart();
 
                 game.RenderWindow.DispatchEvents();
-                game.Update(elapsed);
+                game.Update(elapsed.AsMilliseconds());
 
                 game.RenderWindow.Clear(Color.Black);
-                game.Draw(elapsed);
+                game.Draw();
                 game.RenderWindow.Display();
             }
         }

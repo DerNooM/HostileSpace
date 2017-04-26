@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SFML.System;
+using SFML.Graphics;
 
 
 namespace HostileSpace
@@ -18,15 +16,11 @@ namespace HostileSpace
         }
 
 
-        public virtual void Update(Time Elapsed)
-        {
+        public virtual void Update(Int32 Elapsed)
+        { }
 
-        }
-
-        public virtual void Draw(Time Elapsed)
-        {
-
-        }
+        public virtual void Draw(RenderWindow Window)
+        { }
 
 
         public HostileSpace Game

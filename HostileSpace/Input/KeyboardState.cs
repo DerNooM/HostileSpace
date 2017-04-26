@@ -1,8 +1,9 @@
 ﻿using System;
+using SFML.System;
 using SFML.Window;
 
 
-namespace HostileSpace.Utils
+namespace HostileSpace.Input
 {
     class KeyboardState : GameComponent
     {
@@ -14,6 +15,27 @@ namespace HostileSpace.Utils
             Game.RenderWindow.TextEntered += RenderWindow_TextEntered;
         }
 
+        Boolean f12Down = false;
+        Boolean f12Pressed = false;
+
+
+        public override void Update(Int32 Elapsed)
+        {
+            if (Keyboard.IsKeyPressed(Keyboard.Key.F12))
+            {
+                f12Down = true;
+            }
+            else
+            {
+                f12Pressed = false;
+                if (f12Down)
+                {
+                    f12Pressed = true;
+                    Console.WriteLine("f12");
+                }
+                f12Down = false;
+            }
+        }
 
         private void RenderWindow_TextEntered(object sender, TextEventArgs e)
         {
@@ -51,6 +73,11 @@ namespace HostileSpace.Utils
         public event EventHandler EnterPressed;
         public event EventHandler SpacePressed;
         public event EventHandler TabulatorPressed;
+
+        public Boolean F12Pressed
+        {
+            get { return f12Pressed; }
+        }
 
         public class KeyPressedArgs : EventArgs
         {

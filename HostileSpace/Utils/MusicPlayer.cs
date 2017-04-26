@@ -11,11 +11,11 @@ namespace HostileSpace
     {
         Music music;
 
-        String directory = "audio/music/";
+        String directory = "files/audio/music/";
         List<String> paths = new List<String>();
         int index = 0;
 
-        Time timer = Time.Zero;
+        Int32 timer = 0;
 
 
         public MusicPlayer(HostileSpace Game)
@@ -29,16 +29,17 @@ namespace HostileSpace
             music = new Music(directory + paths[index] + ".ogg");
             music.Volume = 30;
             music.Loop = true;
-            music.Play();
+            //music.Play();
 
             index = (index + 1) % paths.Count;
         }
 
 
-        public override void Update(Time Elapsed)
+        public override void Update(Int32 Elapsed)
         {
             timer += Elapsed;
 
+            /*
             if (timer.AsSeconds() >= 2 * 60)
             {
                 music.Loop = false;
@@ -54,6 +55,7 @@ namespace HostileSpace
 
                 timer = Time.Zero;
             }
+            */
         }
 
 
