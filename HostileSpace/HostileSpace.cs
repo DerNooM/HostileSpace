@@ -5,91 +5,106 @@ using SFML.Graphics;
 using SFML.System;
 using HostileSpace.Utils;
 using HostileSpace.Screens;
-using HostileSpace.Input;
+
 
 namespace HostileSpace
 {
     class HostileSpace
     {
-        RenderWindow renderWindow;
+        RenderWindow window;
 
-        Stats stats;
-        
-        MouseState mouseState;
-        KeyboardState keyboardState;
+        FPSCounter fpsCounter;
+        Input input;
+        ContentManager contentManager;
+
         MusicPlayer musicPlayer;
-        ContentManager contentManager = new ContentManager();
-        AudioPlayer audioPlayer = new AudioPlayer();
+        AudioPlayer audioPlayer;
 
         Background background;
 
-        IGameComponent currentScreen;
+        IGameComponent currentScreen = null;
 
-
+        MainScreen mainScreen;
 
         public HostileSpace()
         {
             ContextSettings settings = new ContextSettings();
             settings.AntialiasingLevel = 16;
+            
+            window = new RenderWindow(new VideoMode(1024, 768), "Hostile Space", Styles.None, settings);
+            window.SetMouseCursorVisible(false);
+            //window.Size = new Vector2u(1200, 800);
+            //window.SetView(new View(new FloatRect(0, 0, window.Size.X, window.Size.Y)));
 
-            renderWindow = new RenderWindow(new VideoMode(1024, 768), "Hostile Space", Styles.Titlebar | Styles.Close, settings);
+            window.SetVerticalSyncEnabled(true);
 
-            renderWindow.SetVerticalSyncEnabled(false);
-            renderWindow.Closed += RenderWindow_Closed;
+            contentManager = new ContentManager();
 
-            stats = new Stats(this);
+            fpsCounter = new FPSCounter(this);
+            input = new Input(this);           
 
-            mouseState = new MouseState(this);
-            keyboardState = new KeyboardState(this);
             musicPlayer = new MusicPlayer(this);
+            audioPlayer = new AudioPlayer();
 
             background = new Background(this);
 
+            mainScreen = new MainScreen(this);
+            currentScreen = mainScreen;
+            currentScreen.Activate();
 
-
+            input.Keyboard.F12Pressed += Keyboard_F12Pressed;
         }
 
 
         public void Update(Int32 Elapsed)
         {
-            stats.Update(Elapsed);
-            mouseState.Update(Elapsed);
-            keyboardState.Update(Elapsed);
+            fpsCounter.Update(Elapsed);
+            input.Update(Elapsed);
             musicPlayer.Update(Elapsed);
 
             background.Update(Elapsed);
 
+            if(currentScreen != null)
+            {
+                currentScreen.Update(Elapsed);
+            }
 
+            if(Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            {
+                window.Close();
+            }
 
-            RenderWindow.SetTitle("fps: " + stats.FPS);
+            Console.Title = "fps: " + fpsCounter.FPS;
         }
 
-        Image tmp;
+        
         public void Draw()
         {
-            background.Draw(renderWindow);
+            background.Draw(window);
 
-
-
-            if (keyboardState.F12Pressed)
+            if (currentScreen != null)
             {
-                tmp = renderWindow.Capture();
-
-                tmp.SaveToFile("screenshot.png");
-                Console.WriteLine("screenshot");
+                currentScreen.Draw(window);
             }
+
+            Input.Mouse.Draw(window);
+        }
+
+        private void Keyboard_F12Pressed(object sender, EventArgs e)
+        {
+            window.Clear(Color.Black);
+            Draw();
+
+            Image tmp = window.Capture();
+            tmp.SaveToFile("screenshot.png");
+            window.Clear(Color.Black);
+            background.Generate();
         }
 
 
-        private void RenderWindow_Closed(object sender, EventArgs e)
+        public RenderWindow Window
         {
-            renderWindow.Close();
-        }
-
-
-        public RenderWindow RenderWindow
-        {
-            get { return renderWindow; }
+            get { return window; }
         }
 
         public Background Background
@@ -103,21 +118,15 @@ namespace HostileSpace
             set { currentScreen = value; }
         }
 
-        public Stats Stats
+        public FPSCounter FPSCounter
         {
-            get { return stats; }
+            get { return fpsCounter; }
         }
 
-        public MouseState MouseState
+        public Input Input
         {
-            get { return mouseState; }
+            get { return input; }
         }
-
-        public KeyboardState KeyboardSate
-        {
-            get { return keyboardState; }
-        }
-
 
         public ContentManager ContentManager
         {
@@ -132,22 +141,22 @@ namespace HostileSpace
 
         static void Main(string[] args)
         {
-
             Clock clock = new Clock();
             Time elapsed;
 
             HostileSpace game = new HostileSpace();
 
-            while (game.RenderWindow.IsOpen)
+            while (game.Window.IsOpen)
             {
                 elapsed = clock.Restart();
 
-                game.RenderWindow.DispatchEvents();
-                game.Update(elapsed.AsMilliseconds());
+                game.Window.DispatchEvents();
+                game.Window.Clear(Color.Black);
 
-                game.RenderWindow.Clear(Color.Black);
+                game.Update(elapsed.AsMilliseconds());              
                 game.Draw();
-                game.RenderWindow.Display();
+
+                game.Window.Display();
             }
         }
 

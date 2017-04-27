@@ -49,6 +49,8 @@ namespace HostileSpace.Screens
                     up = false;
                 else
                     up = true;
+
+                next = rand.Next(8, 30);
             }
 
             if (up)
@@ -57,7 +59,7 @@ namespace HostileSpace.Screens
             }
             else
             {
-                star.Scale = new Vector2f(1.6f, 1.6f);
+                star.Scale = new Vector2f(1.5f, 1.5f);
             }
 
         }
@@ -72,11 +74,6 @@ namespace HostileSpace.Screens
             position.X = X;
             position.Y = Y;
             star.Position = position;
-        }
-
-        public void Next(Int32 Next)
-        {
-            next = Next;
         }
 
 

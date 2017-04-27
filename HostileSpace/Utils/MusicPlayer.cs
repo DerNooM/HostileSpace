@@ -21,10 +21,7 @@ namespace HostileSpace
         public MusicPlayer(HostileSpace Game)
             : base(Game)
         {
-            paths.Add("DST-RailJet");
-            paths.Add("Gregoire Lourme - Commando Team");
-            paths.Add("tgfcoder-FrozenJam");
-            paths.Add("Iwan Gabovitch - Dark Ambience");
+            paths.Add("DST-RailJet-LongSeamlessLoop");
 
             music = new Music(directory + paths[index] + ".ogg");
             music.Volume = 30;

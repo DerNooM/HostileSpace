@@ -18,10 +18,7 @@ namespace HostileSpace
 
         public AudioPlayer()
         {
-            SoundObject tmp = new SoundObject();
-            tmp.SoundBuffer = new SoundBuffer("files/audio/gui/err.wav");
-            tmp.Sound = new Sound(tmp.SoundBuffer);
-            sounds.Add("GUI_ERROR", tmp);
+            SoundObject tmp;
 
             tmp = new SoundObject();
             tmp.SoundBuffer = new SoundBuffer("files/audio/gui/buttonclick.wav");

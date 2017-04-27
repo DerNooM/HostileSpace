@@ -9,6 +9,10 @@ namespace HostileSpace
         void Update(Int32 Elapsed);
         void Draw(RenderWindow Window);
 
+        void Activate();
+        void DeActivate();
+
         HostileSpace Game { get; }
+        Boolean Active { get; }
     }
 }

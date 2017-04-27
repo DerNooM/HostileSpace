@@ -33,7 +33,6 @@ namespace HostileSpace.Screens
         {
             foreach(TwinkleStar star in twinkleStars)
             {
-                star.Next(rand.Next(5, 30));
                 star.Update(Elapsed);
             }
         }
