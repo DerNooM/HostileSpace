@@ -15,7 +15,7 @@ namespace HostileSpace
         List<String> paths = new List<String>();
         int index = 0;
 
-        Int32 timer = 0;
+        Time timer = Time.Zero;
 
 
         public MusicPlayer(HostileSpace Game)
@@ -32,7 +32,7 @@ namespace HostileSpace
         }
 
 
-        public override void Update(Int32 Elapsed)
+        public override void Update(Time Elapsed)
         {
             timer += Elapsed;
 

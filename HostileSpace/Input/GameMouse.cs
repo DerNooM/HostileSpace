@@ -24,7 +24,7 @@ namespace HostileSpace
         }
 
 
-        public override void Update(Int32 Elapsed)
+        public override void Update(Time Elapsed)
         {
             position.Left = Mouse.GetPosition(Game.Window).X;
             position.Top = Mouse.GetPosition(Game.Window).Y;

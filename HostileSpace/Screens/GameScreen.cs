@@ -4,30 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
+using SFML.System;
 
-namespace HostileSpace
+namespace HostileSpace.Screens
 {
-    class PlayerShip : GameComponent
+    class GameScreen : GameComponent
     {
-        List<ShipComponent> components = new List<ShipComponent>();
-
-
-        public PlayerShip(HostileSpace Game)
+        public GameScreen(HostileSpace Game)
             : base(Game)
         {
 
         }
 
 
-        public override void Update(int Elapsed)
+        public override void Update(Time Elapsed)
         {
-            
+            base.Update(Elapsed);
         }
+
 
         public override void Draw(RenderWindow Window)
         {
-            
+            base.Draw(Window);
         }
+
+
+
+
+
 
 
     }

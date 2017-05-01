@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SFML.System;
 
 namespace HostileSpace
 {
@@ -20,7 +21,7 @@ namespace HostileSpace
         }
 
 
-        public override void Update(int Elapsed)
+        public override void Update(Time Elapsed)
         {
             keyboard.Update(Elapsed);
             mouse.Update(Elapsed);

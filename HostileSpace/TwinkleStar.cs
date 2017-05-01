@@ -14,8 +14,8 @@ namespace HostileSpace.Screens
         Sprite star;
         Vector2f position = new Vector2f(0, 0);
 
-        Int32 elapsed = 0;
-        Int32 next = 0;
+        Time elapsed = Time.Zero;
+        Time next = Time.Zero;
 
         static Random rand = new Random();
 
@@ -37,20 +37,20 @@ namespace HostileSpace.Screens
         }
 
 
-        public override void Update(Int32 Elapsed)
+        public override void Update(Time Elapsed)
         {
             elapsed += Elapsed;
 
             if (elapsed >= next)
             {
-                elapsed = 0;
+                elapsed = Time.Zero;
 
                 if (up)
                     up = false;
                 else
                     up = true;
 
-                next = rand.Next(8, 30);
+                next = Time.FromMilliseconds(rand.Next(8, 30));
             }
 
             if (up)

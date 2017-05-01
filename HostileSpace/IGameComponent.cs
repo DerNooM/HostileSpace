@@ -2,11 +2,12 @@
 using SFML.System;
 using SFML.Graphics;
 
+
 namespace HostileSpace
 {
     interface IGameComponent
     {
-        void Update(Int32 Elapsed);
+        void Update(Time Elapsed);
         void Draw(RenderWindow Window);
 
         void Activate();

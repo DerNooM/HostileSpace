@@ -29,7 +29,7 @@ namespace HostileSpace.Screens
             Generate();
         }
 
-        public override void Update(Int32 Elapsed)
+        public override void Update(Time Elapsed)
         {
             foreach(TwinkleStar star in twinkleStars)
             {

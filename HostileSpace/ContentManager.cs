@@ -39,19 +39,24 @@ namespace HostileSpace
             AddTexture("Char00", "files/graphics/heads/char00.png");
             AddTexture("Char01", "files/graphics/heads/male2.png");
 
-            // playership
-            AddTexture("Laser", "files/graphics/playership/laser.png");
-            AddTexture("MissileLauncher", "files/graphics/playership/missile_launcher.png");
+            // ship modules
+            AddTexture("SmallLaser", "files/graphics/modules/laser.png");
+            AddTexture("LargeLaser", "files/graphics/modules/large_laser.png");
 
-            AddTexture("ShieldGenerator", "files/graphics/playership/shield_generator.png");
-            AddTexture("ShieldCapacitor", "files/graphics/playership/shield_capacitor.png");
+            AddTexture("MissileLauncher", "files/graphics/modules/missile_launcher.png");
+            AddTexture("TorpedoLauncher", "files/graphics/modules/torpedo_launcher.png");
 
-            AddTexture("EnergyGenerator", "files/graphics/playership/energy_generator.png");
-            AddTexture("EnergyCapacitor", "files/graphics/playership/capacitor.png");
+            AddTexture("ShieldCapacitor", "files/graphics/modules/shield_generator.png");
+            AddTexture("ShieldGenerator", "files/graphics/modules/shield_capacitor.png");
 
-            AddTexture("LightArmor", "files/graphics/playership/light_armor.png");
-            AddTexture("HeavyArmor", "files/graphics/playership/heavy_armor.png");
+            AddTexture("EnergyCapacitor", "files/graphics/modules/energy_generator.png");
+            AddTexture("EnergyGenerator", "files/graphics/modules/capacitor.png");
 
+            AddTexture("LightArmor", "files/graphics/modules/light_armor.png");
+            AddTexture("HeavyArmor", "files/graphics/modules/heavy_armor.png");
+
+            AddTexture("ArmorRepairer", "files/graphics/modules/armor_repair.png");
+            AddTexture("LargeArmorRepairer", "files/graphics/modules/large_armor_repair.png");
 
             // ships
             AddTexture("Ship01", "files/graphics/ships/F5S4.png");

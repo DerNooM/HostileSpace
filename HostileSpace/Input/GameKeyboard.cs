@@ -1,4 +1,5 @@
 ﻿using System;
+using SFML.System;
 using SFML.Window;
 
 namespace HostileSpace
@@ -15,7 +16,7 @@ namespace HostileSpace
         }
 
 
-        public override void Update(Int32 Elapsed)
+        public override void Update(Time Elapsed)
         {
             if (Keyboard.IsKeyPressed(Keyboard.Key.F12))
             {

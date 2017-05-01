@@ -46,7 +46,7 @@ namespace HostileSpace.Screens
         }
 
 
-        public override void Update(int Elapsed)
+        public override void Update(Time Elapsed)
         {
             
         }

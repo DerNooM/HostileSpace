@@ -17,7 +17,7 @@ namespace HostileSpace
         }
 
 
-        public virtual void Update(Int32 Elapsed)
+        public virtual void Update(Time Elapsed)
         { }
 
         public virtual void Draw(RenderWindow Window)

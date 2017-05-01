@@ -54,23 +54,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentTypes.cs" />
+    <Compile Include="GUI\CheckBox.cs" />
+    <Compile Include="MathHelper.cs" />
+    <Compile Include="PlayerData.cs" />
+    <Compile Include="Screens\GameScreen.cs" />
+    <Compile Include="Screens\SettingsScreen.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="ShipModules\SmallLaser.cs" />
+    <Compile Include="ShipModules\ModuleTypes.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="Input\Input.cs" />
-    <Compile Include="PlayerShip.cs" />
+    <Compile Include="Ships\PlayerShip.cs" />
+    <Compile Include="Ships\SpaceShip.cs" />
     <Compile Include="Screens\CreditsWindow.cs" />
     <Compile Include="Screens\MainScreen.cs" />
-    <Compile Include="Screens\ShipDesigner.cs" />
-    <Compile Include="ShipComponent.cs" />
+    <Compile Include="Screens\ModuleSelector.cs" />
+    <Compile Include="ShipModules\IShipModule.cs" />
+    <Compile Include="ShipModules\ShipModule.cs" />
     <Compile Include="Utils\AudioPlayer.cs" />
     <Compile Include="ContentManager.cs" />
     <Compile Include="GameComponent.cs" />
-    <Compile Include="Screens\Background.cs" />
+    <Compile Include="Background.cs" />
     <Compile Include="HostileSpace.cs" />
     <Compile Include="IGameComponent.cs" />
     <Compile Include="Utils\MusicPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Screens\TwinkleStar.cs" />
+    <Compile Include="TwinkleStar.cs" />
     <Compile Include="Utils\Colors.cs" />
     <Compile Include="Input\GameKeyboard.cs" />
     <Compile Include="Input\GameMouse.cs" />
@@ -149,28 +158,40 @@
     <Content Include="files\graphics\heads\male2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="files\graphics\playership\capacitor.png">
+    <Content Include="files\graphics\modules\armor_repair.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="files\graphics\playership\energy_generator.png">
+    <Content Include="files\graphics\modules\capacitor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="files\graphics\playership\heavy_armor.png">
+    <Content Include="files\graphics\modules\energy_generator.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="files\graphics\playership\laser.png">
+    <Content Include="files\graphics\modules\heavy_armor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="files\graphics\playership\light_armor.png">
+    <Content Include="files\graphics\modules\large_armor_repair.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="files\graphics\playership\missile_launcher.png">
+    <Content Include="files\graphics\modules\large_laser.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="files\graphics\playership\shield_capacitor.png">
+    <Content Include="files\graphics\modules\laser.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="files\graphics\playership\shield_generator.png">
+    <Content Include="files\graphics\modules\light_armor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="files\graphics\modules\missile_launcher.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="files\graphics\modules\shield_capacitor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="files\graphics\modules\shield_generator.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="files\graphics\modules\torpedo_launcher.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="files\graphics\ships\F5S4.png">

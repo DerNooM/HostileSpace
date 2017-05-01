@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace HostileSpace
 {
-    enum ComponentTypes
+    enum ModuleTypes
     {
         Empty,
 
-        Laser,
+        SmallLaser,
+        LargeLaser,
+
         MissileLauncher,
+        TorpedoLauncher,
 
         ShieldGenerator,
         ShieldCapacitor,
@@ -22,6 +25,7 @@ namespace HostileSpace
         LightArmor,
         HeavyArmor,
 
-
+        SmallArmorRepairer,
+        LargeArmorRepairer,
     }
 }

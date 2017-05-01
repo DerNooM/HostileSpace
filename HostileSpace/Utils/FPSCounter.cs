@@ -8,8 +8,8 @@ namespace HostileSpace.Utils
 {
     class FPSCounter : GameComponent
     {
-        Int32 second = 1000;
-        Int32 elapsed = 0;
+        Time second = Time.FromMilliseconds(1000);
+        Time elapsed = Time.Zero;
 
         UInt16 fps = 0;
         UInt16 fpsCounter = 0;
@@ -21,7 +21,7 @@ namespace HostileSpace.Utils
         }
 
 
-        public override void Update(Int32 Elapsed)
+        public override void Update(Time Elapsed)
         {
             fpsCounter++;
             elapsed += Elapsed;

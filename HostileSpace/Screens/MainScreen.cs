@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SFML.System;
 using SFML.Graphics;
 using HostileSpace.GUI;
@@ -12,90 +8,97 @@ namespace HostileSpace.Screens
 {
     class MainScreen : GameComponent
     {
-        Button newGame;
-        Button research;
-        Button shipDesignerbtn;
-        Button settings;
-        Button creditsbtn;
-        Button exitbtn;
-
-
-
-        ShipDesigner shipDesigner;
-
-        CreditsWindow creditsWindow;
+        Button newGameBTN;
+        Button modulesBTN;
+        Button settingsBTN;
+        Button creditsBTN;
+        Button exitBTN;
 
 
         public MainScreen(HostileSpace Game)
             : base(Game)
         {
-            newGame = new Button(Game, "Start Game", 50, 100);
-            research = new Button(Game, "Research", 50, 190);
-            shipDesignerbtn = new Button(Game, "Ship Designer", 50, 280);
-            shipDesignerbtn.ButtonPressed += ShipDesigner_ButtonPressed;
-            settings = new Button(Game, "Settings", 50, 400);
-
-            creditsbtn = new Button(Game, "Credits", 50, 490);
-            creditsbtn.ButtonPressed += Credits_ButtonPressed;
-
-            exitbtn = new Button(Game, "Exit", 50, 580);
-            exitbtn.ButtonPressed += Exit_ButtonPressed;
-
-            shipDesigner = new ShipDesigner(Game);
-
-            creditsWindow = new CreditsWindow(Game);
+            newGameBTN = new Button(Game, "Start Game", (int)(Game.Window.Size.X / 2) - 96, (int)Game.Window.Size.Y - 460);
+            modulesBTN = new Button(Game, "Ship Modules", (int)(Game.Window.Size.X / 2) - 96, (int)Game.Window.Size.Y - 380);
+            settingsBTN = new Button(Game, "Settings", (int)(Game.Window.Size.X / 2) - 96, (int)Game.Window.Size.Y - 260);
+            creditsBTN = new Button(Game, "Credits", (int)(Game.Window.Size.X / 2) - 96, (int)Game.Window.Size.Y - 180);
+            exitBTN = new Button(Game, "Exit", (int)(Game.Window.Size.X / 2) - 96, (int)Game.Window.Size.Y - 100);          
         }
 
-        
 
-        public override void Update(int Elapsed)
+        public override void Update(Time Elapsed)
         {
-            newGame.Update(Elapsed);
-            research.Update(Elapsed);
-            shipDesignerbtn.Update(Elapsed);
-            settings.Update(Elapsed);
-            creditsbtn.Update(Elapsed);
-            exitbtn.Update(Elapsed);
+            if (!Active)
+                return;
 
-            shipDesigner.Update(Elapsed);
-
-            creditsWindow.Update(Elapsed);
+            newGameBTN.Update(Elapsed);
+            modulesBTN.Update(Elapsed);
+            settingsBTN.Update(Elapsed);
+            creditsBTN.Update(Elapsed);
+            exitBTN.Update(Elapsed);
         }
 
         public override void Draw(RenderWindow Window)
         {
-            newGame.Draw(Window);
-            research.Draw(Window);
-            shipDesignerbtn.Draw(Window);
-            settings.Draw(Window);
-            creditsbtn.Draw(Window);
-            exitbtn.Draw(Window);
+            if (!Active)
+                return;
 
-
-            shipDesigner.Draw(Window);
-
-            creditsWindow.Draw(Window);
+            newGameBTN.Draw(Window);
+            modulesBTN.Draw(Window);
+            settingsBTN.Draw(Window);
+            creditsBTN.Draw(Window);
+            exitBTN.Draw(Window);
         }
 
-        private void ShipDesigner_ButtonPressed(object sender, EventArgs e)
+        public override void Activate()
         {
-            if (shipDesigner.Active)
-                shipDesigner.DeActivate();
-            else
-                shipDesigner.Activate();
+            base.Activate();
+
+            newGameBTN.Activate();
+            modulesBTN.Activate();
+            settingsBTN.Activate();
+            creditsBTN.Activate();
+            exitBTN.Activate();
+            exitBTN.ButtonPressed += Exit_ButtonPressed;
         }
 
-        private void Credits_ButtonPressed(object sender, EventArgs e)
+        public override void DeActivate()
         {
-            if (creditsWindow.Active)
-                creditsWindow.DeActivate();
-            else
-                creditsWindow.Activate();
+            base.DeActivate();
+
+            newGameBTN.DeActivate();
+            modulesBTN.DeActivate();
+            settingsBTN.DeActivate();
+            creditsBTN.DeActivate();
+            exitBTN.DeActivate();
+            exitBTN.ButtonPressed -= Exit_ButtonPressed;
         }
 
         private void Exit_ButtonPressed(object sender, EventArgs e)
         {
+            Game.PlayerData.Save("player.xml");      
             Game.Window.Close();
+        }
+
+
+        public Button NewGameBTN
+        {
+            get { return newGameBTN; }
+        }
+
+        public Button ModulesBTN
+        {
+            get { return modulesBTN; }
+        }
+
+        public Button SettingsBTN
+        {
+            get { return settingsBTN; }
+        }
+
+        public Button CreditsBTN
+        {
+            get { return creditsBTN; }
         }
 
 
