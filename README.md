@@ -14,16 +14,18 @@ weapons, armor, shields and energy generators.
   
 credits:
 
-SFML www.sfml-dev.org
+SFML - www.sfml-dev.org
 
-#sfml irc for the help and ideas.
+#sfml for ideas and help
 
-MillionthVector http://millionthvector.blogspot.de
+audio:
 
-Iwan Gabovitch http://opengameart.org/users/qubodup
+www.nosoapradio.us
 
-Grégoire Lourme http://www.jamendo.com/en/artist/560/gregoire-lourme
+Deceased Superior Technician
 
-tgfcoder https://twitter.com/tgfcoder
+graphics:
 
-http://www.nosoapradio.us
+MillionthVector - www.millionthvector.blogspot.de
+
+Daniel Cook - Lostgarden.com
