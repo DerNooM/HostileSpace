@@ -62,7 +62,10 @@ namespace HostileSpace.GUI
                 Game.AudioPlayer.PlaySound("GUI_CLICK");
 
                 if (boxChecked)
+                {
                     boxChecked = false;
+                    UnCheckedEvent?.Invoke(this, null);
+                }
                 else
                 {
                     boxChecked = true;
@@ -73,6 +76,7 @@ namespace HostileSpace.GUI
 
 
         public event EventHandler CheckedEvent;
+        public event EventHandler UnCheckedEvent;
 
         public Boolean Checked
         {

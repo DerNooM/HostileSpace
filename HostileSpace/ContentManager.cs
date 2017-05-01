@@ -35,10 +35,6 @@ namespace HostileSpace
             AddTexture("Bigbox", "files/graphics/gui/box06.png");
 
 
-            // character selection
-            AddTexture("Char00", "files/graphics/heads/char00.png");
-            AddTexture("Char01", "files/graphics/heads/male2.png");
-
             // ship modules
             AddTexture("SmallLaser", "files/graphics/modules/laser.png");
             AddTexture("LargeLaser", "files/graphics/modules/large_laser.png");

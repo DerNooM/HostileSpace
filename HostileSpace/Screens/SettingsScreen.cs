@@ -16,10 +16,16 @@ namespace HostileSpace.Screens
         Text txt1920x1080;
         Text txt1920x1200;
 
+        Text txtAudio;
+        Text txtSound;
+
         CheckBox chk1024x786;
         CheckBox chk1280x720;
         CheckBox chk1920x1080;
         CheckBox chk1920x1200;
+
+        CheckBox audio;
+        CheckBox sound;
 
         Button accept;
         Button back;
@@ -48,13 +54,23 @@ namespace HostileSpace.Screens
             txt1920x1200 = new Text("1920x1200", Game.ContentManager.GetFont("Arial"), 24);
             txt1920x1200.Position = new Vector2f(background.Position.X + 70, background.Position.Y + 15);
 
+            txtAudio = new Text("Music", Game.ContentManager.GetFont("Arial"), 24);
+            txtAudio.Position = new Vector2f(background.Position.X - 180, background.Position.Y + 115);
+            txtSound = new Text("Sound", Game.ContentManager.GetFont("Arial"), 24);
+            txtSound.Position = new Vector2f(background.Position.X + 70, background.Position.Y + 115);
+
             chk1024x786 = new CheckBox(Game, (int)background.Position.X - 250, (int)background.Position.Y - 100);          
             chk1280x720 = new CheckBox(Game, (int)background.Position.X, (int)background.Position.Y - 100);            
             chk1920x1080 = new CheckBox(Game, (int)background.Position.X - 250, (int)background.Position.Y);           
             chk1920x1200 = new CheckBox(Game, (int)background.Position.X, (int)background.Position.Y);
-            
-            accept = new Button(Game, "Save", (int)background.Position.X - 220, (int)background.Position.Y + 100);          
-            back = new Button(Game, "Back", (int)background.Position.X + 30 , (int)background.Position.Y + 100);
+
+            audio = new CheckBox(Game, (int)background.Position.X - 250, (int)background.Position.Y + 100);
+            audio.Checked = Game.Settings.Audio;
+            sound = new CheckBox(Game, (int)background.Position.X, (int)background.Position.Y + 100);           
+            sound.Checked = Game.Settings.Sound;
+
+            accept = new Button(Game, "Save", (int)background.Position.X - 220, (int)background.Position.Y + 210);          
+            back = new Button(Game, "Back", (int)background.Position.X + 30 , (int)background.Position.Y + 210);
 
             tmpX = Game.Settings.ResolutionX;
             tmpY = Game.Settings.ResolutionY;
@@ -97,6 +113,9 @@ namespace HostileSpace.Screens
                     chk1920x1200.Checked = true;
                 }
             }
+
+            accept.Update(Elapsed);
+            back.Update(Elapsed);
         }
 
         public override void Draw(RenderWindow Window)
@@ -117,6 +136,11 @@ namespace HostileSpace.Screens
             Window.Draw(txt1920x1080);
             Window.Draw(txt1920x1200);
 
+            audio.Draw(Window);
+            sound.Draw(Window);
+            Window.Draw(txtAudio);
+            Window.Draw(txtSound);
+
             accept.Draw(Window);
             back.Draw(Window);
         }
@@ -133,6 +157,9 @@ namespace HostileSpace.Screens
             chk1920x1080.CheckedEvent += Chk1920x1080_CheckedEvent;
             chk1920x1200.Activate();
             chk1920x1200.CheckedEvent += Chk1920x1200_CheckedEvent;
+
+            audio.Activate();
+            sound.Activate();
 
             accept.Activate();
             accept.ButtonPressed += Accept_ButtonPressed;
@@ -153,6 +180,9 @@ namespace HostileSpace.Screens
             chk1920x1200.DeActivate();
             chk1920x1200.CheckedEvent -= Chk1920x1200_CheckedEvent;
 
+            audio.DeActivate();
+            sound.DeActivate();
+
             accept.DeActivate();
             accept.ButtonPressed -= Accept_ButtonPressed;
 
@@ -163,6 +193,10 @@ namespace HostileSpace.Screens
         {
             Game.Settings.ResolutionX = tmpX;
             Game.Settings.ResolutionY = tmpY;
+
+            Game.Settings.Audio = audio.Checked;
+            Game.Settings.Sound = sound.Checked;
+
             Game.Settings.Save("settings.xml");
         }
 

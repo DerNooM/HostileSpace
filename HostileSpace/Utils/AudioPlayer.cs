@@ -5,7 +5,7 @@ using SFML.Audio;
 
 namespace HostileSpace
 {
-    class AudioPlayer
+    class AudioPlayer : GameComponent
     {
         struct SoundObject
         {
@@ -16,7 +16,8 @@ namespace HostileSpace
         Dictionary<String, SoundObject> sounds = new Dictionary<String, SoundObject>();
 
 
-        public AudioPlayer()
+        public AudioPlayer(HostileSpace Game)
+            : base(Game)
         {
             SoundObject tmp;
 
@@ -30,6 +31,9 @@ namespace HostileSpace
 
         public void PlaySound(String Name)
         {
+            if (!Game.Settings.Sound)
+                return;
+
             SoundObject tmp = sounds[Name];
             tmp.Sound.Play();
         }

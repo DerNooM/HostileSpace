@@ -33,25 +33,18 @@ namespace HostileSpace
         GameScreen gameScreen;
 
         SettingsScreen settingsScreen;
+        CreditsScreen creditsScreen;
+
 
         public HostileSpace()
         {
-            try
-            {
-                settings = Settings.Load("settings.xml");
-            }
-            catch
-            {
-                settings.ResolutionX = 1024;
-                settings.ResolutionY = 768;
-            }
+            LoadSettings();
+            LoadPlayerData();
 
             ContextSettings contextSettings = new ContextSettings();
-            contextSettings.AntialiasingLevel = 16;
-            
+            contextSettings.AntialiasingLevel = 16;       
             window = new RenderWindow(new VideoMode(settings.ResolutionX, settings.ResolutionY), "Hostile Space", Styles.None, contextSettings);
             window.SetMouseCursorVisible(false);
-
             window.SetVerticalSyncEnabled(false);
 
             contentManager = new ContentManager();
@@ -60,41 +53,23 @@ namespace HostileSpace
             input = new Input(this);           
 
             musicPlayer = new MusicPlayer(this);
-            audioPlayer = new AudioPlayer();
+            audioPlayer = new AudioPlayer(this);
 
             background = new Background(this);
 
 
-            try
-            {
-                playerData = PlayerData.Load("player.xml");
-                Console.WriteLine("player credits: " + playerData.Credits);
-            }
-            catch
-            {
-                playerData = new PlayerData();
-
-                playerData.Credits = 1000;
-
-                for(int i = 0; i < 24; i++)
-                {
-                    playerData.Modules[i] = 0;
-                }
-                playerData.Modules[0] = (int)ModuleTypes.SmallLaser;
-                playerData.Modules[1] = (int)ModuleTypes.ShieldCapacitor;
-                playerData.Modules[2] = (int)ModuleTypes.ShieldGenerator;
-            }
-
-            
 
             mainScreen = new MainScreen(this);
             mainScreen.NewGameBTN.ButtonPressed += NewGameBTN_ButtonPressed;
             mainScreen.SettingsBTN.ButtonPressed += SettingsBTN_ButtonPressed;
+            mainScreen.CreditsBTN.ButtonPressed += CreditsBTN_ButtonPressed;
 
             gameScreen = new GameScreen(this);
 
             settingsScreen = new SettingsScreen(this);
             settingsScreen.Back.ButtonPressed += Back_ButtonPressed;
+            creditsScreen = new CreditsScreen(this);
+            creditsScreen.Back.ButtonPressed += Back_ButtonPressed1;
 
             currentScreen = mainScreen;
             currentScreen.Activate();
@@ -102,6 +77,20 @@ namespace HostileSpace
             
 
             input.Keyboard.F12Pressed += Keyboard_F12Pressed;
+        }
+
+        private void Back_ButtonPressed1(object sender, EventArgs e)
+        {
+            currentScreen.DeActivate();
+            currentScreen = mainScreen;
+            currentScreen.Activate();
+        }
+
+        private void CreditsBTN_ButtonPressed(object sender, EventArgs e)
+        {
+            currentScreen.DeActivate();
+            currentScreen = creditsScreen;
+            currentScreen.Activate();
         }
 
         private void Back_ButtonPressed(object sender, EventArgs e)
@@ -145,7 +134,6 @@ namespace HostileSpace
                 currentScreen.Activate();
             }
 
-
             Console.Title = "fps: " + fpsCounter.FPS;
         }
 
@@ -161,15 +149,68 @@ namespace HostileSpace
             Input.Mouse.Draw(window);
         }
 
+        void LoadSettings()
+        {
+            try
+            {
+                settings = Settings.Load("settings.xml");
+            }
+            catch
+            {
+                settings.ResolutionX = 1024;
+                settings.ResolutionY = 768;
+
+                settings.Audio = true;
+                settings.Sound = true;
+
+                settings.Save("settings.xml");
+            }
+        }
+
+        void LoadPlayerData()
+        {
+            try
+            {
+                playerData = PlayerData.Load("player.xml");
+                Console.WriteLine("player credits: " + playerData.Credits);
+            }
+            catch
+            {
+                playerData = new PlayerData();
+
+                playerData.Credits = 1000;
+
+                for (int i = 0; i < 24; i++)
+                {
+                    playerData.Modules[i] = 0;
+                }
+
+                playerData.Modules[0] = (int)ModuleTypes.SmallLaser;
+                playerData.Modules[1] = (int)ModuleTypes.ShieldCapacitor;
+                playerData.Modules[2] = (int)ModuleTypes.ShieldGenerator;
+                playerData.Modules[3] = (int)ModuleTypes.LightArmor;
+            }
+        }
+
         private void Keyboard_F12Pressed(object sender, EventArgs e)
         {
             window.Clear(Color.Black);
             Draw();
 
             Image tmp = window.Capture();
-            tmp.SaveToFile("screenshot.png");
+            System.IO.Directory.CreateDirectory("screenshots");
+            tmp.SaveToFile("screenshots/" +
+                DateTime.Now.Hour + "_" +
+                DateTime.Now.Minute + "_" +
+                DateTime.Now.Second + "-" +
+                DateTime.Now.Day + "_" +
+                DateTime.Now.Month + "_" +
+                DateTime.Now.Year +                
+                ".png");
 
             window.Clear(Color.Black);
+
+            Console.WriteLine("screenshot");
         }
 
 

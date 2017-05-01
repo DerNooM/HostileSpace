@@ -13,6 +13,9 @@ namespace HostileSpace
         UInt32 resX = 0;
         UInt32 resY = 0;
 
+        Boolean audio = true;
+        Boolean sound = true;
+
         public Settings()
         {
 
@@ -49,6 +52,18 @@ namespace HostileSpace
         {
             get { return resY; }
             set { resY = value; }
+        }
+
+        public Boolean Audio
+        {
+            get { return audio; }
+            set { audio = value; }
+        }
+
+        public Boolean Sound
+        {
+            get { return sound; }
+            set { sound = value; }
         }
 
 

@@ -28,31 +28,22 @@ namespace HostileSpace
             music.Loop = true;
             //music.Play();
 
-            index = (index + 1) % paths.Count;
+            //index = (index + 1) % paths.Count;
         }
 
 
         public override void Update(Time Elapsed)
         {
-            timer += Elapsed;
-
-            /*
-            if (timer.AsSeconds() >= 2 * 60)
+            if(Game.Settings.Audio)
             {
-                music.Loop = false;
-                timer = Time.Zero;
+                if (music.Status == SoundStatus.Stopped)
+                    music.Play();
             }
-            if(music.Status == SoundStatus.Stopped)
+            else
             {
-                music = new Music(directory + paths[index] + ".ogg");
-                music.Volume = 30;
-                music.Play();
-                music.Loop = true;
-                index = (index + 1) % paths.Count;
-
-                timer = Time.Zero;
+                if (music.Status == SoundStatus.Playing)
+                    music.Stop();
             }
-            */
         }
 
 
