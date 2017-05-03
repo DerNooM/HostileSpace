@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
@@ -13,7 +12,8 @@ namespace HostileSpace
     {
         RenderWindow window;
 
-        Settings settings = new Settings();
+        Settings settings;
+        PlayerData playerData;
 
         FPSCounter fpsCounter;
         Input input;
@@ -24,16 +24,14 @@ namespace HostileSpace
 
         Background background;
 
-        IGameComponent currentScreen = null;
-
-        PlayerData playerData;
-
         MainScreen mainScreen;
 
         GameScreen gameScreen;
 
         SettingsScreen settingsScreen;
         CreditsScreen creditsScreen;
+
+        IGameComponent currentScreen = null;
 
 
         public HostileSpace()
@@ -45,7 +43,7 @@ namespace HostileSpace
             contextSettings.AntialiasingLevel = 16;       
             window = new RenderWindow(new VideoMode(settings.ResolutionX, settings.ResolutionY), "Hostile Space", Styles.None, contextSettings);
             window.SetMouseCursorVisible(false);
-            window.SetVerticalSyncEnabled(false);
+            window.SetVerticalSyncEnabled(true);
 
             contentManager = new ContentManager();
 
@@ -74,8 +72,8 @@ namespace HostileSpace
             currentScreen = mainScreen;
             currentScreen.Activate();
 
-            
 
+            camera = window.DefaultView;
             input.Keyboard.F12Pressed += Keyboard_F12Pressed;
         }
 
@@ -98,6 +96,8 @@ namespace HostileSpace
             currentScreen.DeActivate();
             currentScreen = mainScreen;
             currentScreen.Activate();
+
+
         }
 
         private void SettingsBTN_ButtonPressed(object sender, EventArgs e)
@@ -136,9 +136,19 @@ namespace HostileSpace
 
             Console.Title = "fps: " + fpsCounter.FPS;
         }
-
+        View camera;
         public void Draw()
         {
+            if(currentScreen is GameScreen)
+            {
+                camera.Center = (currentScreen as GameScreen).PlayerShip.Position;
+                window.SetView(camera);
+            }
+            else
+            {
+                window.SetView(window.DefaultView);
+            }
+
             background.Draw(window);
 
             if (currentScreen != null)
@@ -157,6 +167,8 @@ namespace HostileSpace
             }
             catch
             {
+                settings = new Settings();
+
                 settings.ResolutionX = 1024;
                 settings.ResolutionY = 768;
 
@@ -172,7 +184,6 @@ namespace HostileSpace
             try
             {
                 playerData = PlayerData.Load("player.xml");
-                Console.WriteLine("player credits: " + playerData.Credits);
             }
             catch
             {
@@ -213,6 +224,10 @@ namespace HostileSpace
             Console.WriteLine("screenshot");
         }
 
+        public View Camera
+        {
+            get { return camera; }
+        }
 
         public RenderWindow Window
         {
@@ -265,6 +280,8 @@ namespace HostileSpace
         {
             Clock clock = new Clock();
             Time elapsed;
+            Time timerPerFrame = Time.FromSeconds(1.0f / 60.0f);
+            Time timeSinceLastUpdate = Time.Zero;
 
             HostileSpace game = new HostileSpace();
 
@@ -272,10 +289,17 @@ namespace HostileSpace
             {
                 elapsed = clock.Restart();
 
-                game.Window.DispatchEvents();
-                game.Window.Clear(Color.Black);
+                timeSinceLastUpdate += elapsed;
 
-                game.Update(elapsed);              
+                while (timeSinceLastUpdate > timerPerFrame)
+                {
+                    timeSinceLastUpdate -= timerPerFrame;
+
+                    game.Window.DispatchEvents();
+                    game.Update(timerPerFrame);
+                }
+
+                game.Window.Clear(Color.Black);
                 game.Draw();
 
                 game.Window.Display();

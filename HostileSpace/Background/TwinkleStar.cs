@@ -59,7 +59,7 @@ namespace HostileSpace.Screens
             }
             else
             {
-                star.Scale = new Vector2f(1.5f, 1.5f);
+                star.Scale = new Vector2f(1.7f, 1.7f);
             }
 
         }

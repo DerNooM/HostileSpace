@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SFML.System;
+﻿using SFML.System;
 using SFML.Graphics;
 using HostileSpace.GUI;
 
@@ -36,6 +31,7 @@ namespace HostileSpace.Screens
             text.DisplayedString =
                 "SFML - www.sfml-dev.org\n" +
                 "#sfml for ideas and help\n" +
+                "www.opengameart.org\n" +
                 "\n" +
                 "audio:\n" +
                 "www.nosoapradio.us\n" +
@@ -88,6 +84,7 @@ namespace HostileSpace.Screens
         {
             get { return back; }
         }
+
 
     }
 }

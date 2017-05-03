@@ -59,6 +59,7 @@ namespace HostileSpace
 
 
             // misc
+            AddTexture("DestinationMarker", "files/graphics/ships/destination.png");
         }
 
         void AddTexture(String Name, String Path)

@@ -11,168 +11,96 @@ namespace HostileSpace
     class SpaceShip : GameComponent
     {
         RectangleShape ship = null;
-        CircleShape shortRange;
-        CircleShape longRange;
 
-        ShipModule[] modules = new ShipModule[24];
-
-        Int32 shield = 0;
-        Int32 energy = 0;
-        Int32 armor = 0;
-
-        Single shortRangeDistance = 200;
-        Single longRangeDistance = 350;
-
-
-        SpaceShip target = null;
+        const Single shortRangeDistance = 200;
+        const Single longRangeDistance = 350;
 
         Boolean alive = true;
+
+
+        Vector2f destination = new Vector2f(0, 0);
+
+        Vector2f direction = new Vector2f(0, 0);
+        Single velocity = 0.1f;
+        Single rotation = 0.0f;
+
+        Single mass = 500;
+
+
+        Boolean stopped = true;
 
         public SpaceShip(HostileSpace Game)
             : base(Game)
         {
-            for (int i = 0; i < 24; i++)
-                modules[i] = null;
+            Ship = new RectangleShape(new Vector2f(291, 173));
+            Ship.Texture = Game.ContentManager.GetTexture("Ship01");
+            Ship.Origin = new Vector2f(Ship.Texture.Size.X / 2, Ship.Texture.Size.Y / 2);
+            Ship.Scale = Ship.Scale / 4;
+            Ship.Position = new Vector2f(Game.Window.Size.X / 2, Game.Window.Size.Y / 2);
         }
 
 
-        Time tmp = Time.FromMilliseconds(1000);
+        public void SetDestination(Vector2f Destination)
+        {
+            if (MathHelper.GetDistance(ship.Position, Destination) > 30)
+            {
+                destination = Destination;
+            }
+        }
 
         public override void Update(Time Elapsed)
         {
-            if (!alive)
+            if (!alive || !Active)
                 return;
 
-            /*
-            tmp -= Elapsed;
-
-            if(tmp.AsMilliseconds() < 0)
+            if (MathHelper.GetDistance(ship.Position, destination) < 30)
             {
-                tmp += Time.FromMilliseconds(1000);
-                Console.WriteLine("1 sec");
+                velocity = 0;
+                stopped = true;
+                return;
             }
-            */
-            for (int i = 0; i < 24; i++)
-            {
-                if (modules[i] != null)
-                {
-
-                    if (modules[i].Type == ModuleTypes.SmallLaser)
-                    {
-
-                        HandleSmallLAser(Elapsed, modules[i]);
-                    }
-
-
-
-                }
-            }
-        }
-        
-
-        void HandleSmallLAser(Time Elapsed, ShipModule Module)
-        {
-            Module.CurrentCooldown -= Elapsed;
-
+            else
+                stopped = false;
             
-            if (Module.CurrentCooldown < Time.Zero)
+            if (MathHelper.GetDistance(ship.Position, destination) > 100)
             {
-                Module.CurrentCooldown += Module.MaxCooldown;
-
-                if (target != null)
-                {
-                    if(!target.Alive)
-                    {
-                        target = null;
-                        return;
-                    }
-                    if (MathHelper.GetDistance(target.Ship.Position, ship.Position) <= shortRangeDistance)
-                    {
-                        
-                        
-                        FireSmallLaser();
-                    }
-
-
-                }
-            }
-        }
-
-        public void AddModule(ShipModule Module)
-        {
-            for(int i = 0; i < 24; i++)
-            {
-                if (modules[i] == null)
-                {
-                    modules[i] = Module;
-                    return;
-                }
-            }
-        }
-
-        void FireSmallLaser()
-        {
-            Console.WriteLine(DateTime.Now +  " small laser fired");
-        }
-
-        public void TakeDamage(UInt16 Ammount)
-        {
-            if (shield > 0)
-            {
-                shield -= Ammount;
-
-                if (shield < 0)
-                    shield = 0;
+                velocity = (Single)Math.Min(1.0, velocity + (0.5f * Elapsed.AsMilliseconds()) / mass);
             }
             else
             {
-                armor -= Ammount;
-
-                if (armor <= 0)
-                {
-                    armor = 0;
-                    Explode();
-                }
+                velocity = (Single)Math.Max(0.2f, velocity - (0.5f * Elapsed.AsMilliseconds()) / mass);
             }
+            
+            if (ship.Rotation >= 360)
+            {
+                ship.Rotation = 0;
+            }
+            if (ship.Rotation <= -360)
+            {
+                ship.Rotation = 0;
+            }
+
+            direction = destination - ship.Position;
+
+            rotation = (float)Math.Atan2(direction.Y, direction.X);
+            rotation = MathHelper.RadianToDegree(rotation);
+            ship.Rotation -= (0.002f * Elapsed.AsMilliseconds()) * MathHelper.ShortestRotation(rotation, ship.Rotation);
+
+            direction.Y = (Single)Math.Sin(MathHelper.DegreeToRadian(ship.Rotation));
+            direction.X = (Single)Math.Cos(MathHelper.DegreeToRadian(ship.Rotation));
+
+            ship.Position += direction * velocity * 0.2f * Elapsed.AsMilliseconds();
         }
 
-        void Explode()
-        {
-            alive = false;
-
-        }
-
-        public void SetTarget(SpaceShip Target)
-        {
-            target = Target;
-        }
 
         public override void Draw(RenderWindow Window)
         {
+            if (!alive || !Active)
+                return;
+
             Window.Draw(ship);
-            Window.Draw(shortRange);
-            Window.Draw(longRange);
         }
 
-        public void SetupShortRangeIndicator()
-        {
-            shortRange = new CircleShape(shortRangeDistance);
-            shortRange.OutlineColor = new Color(255, 255, 255, 20);
-            shortRange.OutlineThickness = 1;
-            shortRange.FillColor = Color.Transparent;
-            shortRange.Position = ship.Position;
-            shortRange.Origin = new Vector2f(shortRange.GetGlobalBounds().Width / 2, shortRange.GetGlobalBounds().Height / 2);
-        }
-
-        public void SetupLongRangeIndicator()
-        {
-            longRange = new CircleShape(longRangeDistance);
-            longRange.OutlineColor = new Color(255, 255, 255, 20);
-            longRange.OutlineThickness = 1;
-            longRange.FillColor = Color.Transparent;
-            longRange.Position = ship.Position;
-            longRange.Origin = new Vector2f(longRange.GetGlobalBounds().Width / 2, longRange.GetGlobalBounds().Height / 2);
-        }
 
 
         public Boolean Alive
@@ -186,6 +114,26 @@ namespace HostileSpace
             set { ship = value; }
         }
 
+
+        public Vector2f Position
+        {
+            get { return ship.Position; }
+        }
+
+        public Single ShortRangeDistance
+        {
+            get { return shortRangeDistance; }
+        }
+
+        public Single LongRangeDistance
+        {
+            get { return longRangeDistance; }
+        }
+
+        public Boolean Stopped
+        {
+            get { return stopped; }
+        }
 
 
     }

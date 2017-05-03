@@ -49,7 +49,9 @@ namespace HostileSpace
 
         public override void Draw(RenderWindow Window)
         {
+            Window.SetView(Window.DefaultView);
             Window.Draw(pointer);
+            Window.SetView(Game.Camera);
         }
 
 
