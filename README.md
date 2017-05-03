@@ -18,11 +18,15 @@ SFML - www.sfml-dev.org
 
 #sfml for ideas and help
 
+www.opengameart.org
+
+
 audio:
 
 www.nosoapradio.us
 
 Deceased Superior Technician
+
 
 graphics:
 
