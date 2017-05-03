@@ -23,7 +23,6 @@ namespace HostileSpace.Utils
 
         public override void Update(Time Elapsed)
         {
-            fpsCounter++;
             elapsed += Elapsed;
 
             if(elapsed >= second)
@@ -34,6 +33,10 @@ namespace HostileSpace.Utils
             }
         }
 
+        public override void Draw(RenderWindow Window)
+        {
+            fpsCounter++;
+        }
 
         public UInt16 FPS
         {

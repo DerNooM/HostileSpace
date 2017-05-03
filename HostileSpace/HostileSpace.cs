@@ -12,7 +12,8 @@ namespace HostileSpace
     {
         RenderWindow window;
 
-        Settings settings;
+        GameData gameData = new GameData();
+
         PlayerData playerData;
 
         FPSCounter fpsCounter;
@@ -32,18 +33,21 @@ namespace HostileSpace
         CreditsScreen creditsScreen;
 
         IGameComponent currentScreen = null;
+        
+        View camera;
+        Single zoom = 1.0f;
 
 
         public HostileSpace()
         {
-            LoadSettings();
+            LoadData();
             LoadPlayerData();
 
             ContextSettings contextSettings = new ContextSettings();
             contextSettings.AntialiasingLevel = 16;       
-            window = new RenderWindow(new VideoMode(settings.ResolutionX, settings.ResolutionY), "Hostile Space", Styles.None, contextSettings);
+            window = new RenderWindow(new VideoMode(gameData.Settings[0].ResolutionX, gameData.Settings[0].ResolutionY), "Hostile Space", Styles.None, contextSettings);
             window.SetMouseCursorVisible(false);
-            window.SetVerticalSyncEnabled(true);
+            window.SetVerticalSyncEnabled(false);
 
             contentManager = new ContentManager();
 
@@ -75,6 +79,31 @@ namespace HostileSpace
 
             camera = window.DefaultView;
             input.Keyboard.F12Pressed += Keyboard_F12Pressed;
+
+            window.MouseWheelMoved += Window_MouseWheelMoved;
+        }
+
+        
+        private void Window_MouseWheelMoved(object sender, MouseWheelEventArgs e)
+        {
+            Console.WriteLine(e.Delta);
+
+            if(e.Delta <= -1)
+            {
+                if (zoom >= 2)
+                    return;
+
+                zoom += 0.1f;
+                camera.Zoom(1.1f);
+            }
+            if (e.Delta >= 1)
+            {
+                if (zoom <= 1.0)
+                    return;
+
+                zoom -= 0.1f;
+                camera.Zoom(0.9f);
+            }
         }
 
         private void Back_ButtonPressed1(object sender, EventArgs e)
@@ -136,9 +165,11 @@ namespace HostileSpace
 
             Console.Title = "fps: " + fpsCounter.FPS;
         }
-        View camera;
+        
         public void Draw()
         {
+            fpsCounter.Draw(window);
+
             if(currentScreen is GameScreen)
             {
                 camera.Center = (currentScreen as GameScreen).PlayerShip.Position;
@@ -159,23 +190,19 @@ namespace HostileSpace
             Input.Mouse.Draw(window);
         }
 
-        void LoadSettings()
+        void LoadData()
         {
             try
             {
-                settings = Settings.Load("settings.xml");
+                gameData.ReadXml("gamedata.xml");
             }
             catch
             {
-                settings = new Settings();
+                Console.WriteLine("creating db...");
+                GameData.SettingsRow settings = gameData.Settings.NewSettingsRow();
+                gameData.Settings.AddSettingsRow(settings);
 
-                settings.ResolutionX = 1024;
-                settings.ResolutionY = 768;
-
-                settings.Audio = true;
-                settings.Sound = true;
-
-                settings.Save("settings.xml");
+                gameData.WriteXml("gamedata.xml");
             }
         }
 
@@ -234,9 +261,9 @@ namespace HostileSpace
             get { return window; }
         }
 
-        public Settings Settings
+        public GameData GameData
         {
-            get { return settings; }
+            get { return gameData; }
         }
 
         public Background Background

@@ -19,6 +19,8 @@ namespace HostileSpace.Screens
         List<Sprite> mediumStars = new List<Sprite>();
         List<Sprite> bigStars = new List<Sprite>();
 
+        List<Sprite> nebulae = new List<Sprite>();
+
         RenderTexture texture = new RenderTexture(8192, 8192);
         Sprite sprite;
 
@@ -106,7 +108,31 @@ namespace HostileSpace.Screens
                 bigStars.Add(sprite);
             }
 
+            for (int i = 0; i < 10; i++)
+            {
+                Sprite sprite = null;
+
+                int tmp = rand.Next(0, 4);
+
+                if (tmp == 0)
+                    sprite = new Sprite(Game.ContentManager.GetTexture("BlueNebula"));
+                else if (tmp == 1)
+                    sprite = new Sprite(Game.ContentManager.GetTexture("BrownNebula"));
+                else if (tmp == 2)
+                    sprite = new Sprite(Game.ContentManager.GetTexture("GrayNebula"));
+                else if (tmp == 3)
+                    sprite = new Sprite(Game.ContentManager.GetTexture("PurpleNebula"));
+
+                sprite.Position = new Vector2f(rand.Next(0, 8192), rand.Next(0, 8192));
+                nebulae.Add(sprite);
+            }
+
             texture.Clear();
+
+            foreach (Sprite nebula in nebulae)
+            {
+                texture.Draw(nebula);
+            }
 
             foreach (Sprite star in smallStars)
             {

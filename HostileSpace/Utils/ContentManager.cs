@@ -25,6 +25,11 @@ namespace HostileSpace
             AddTexture("BigStar01", "files/graphics/background/star_big01.png");
             AddTexture("BigStar02", "files/graphics/background/star_big02.png");
 
+            AddTexture("BlueNebula", "files/graphics/background/blue_nebula.png");
+            AddTexture("BrownNebula", "files/graphics/background/brown_nebula.png");
+            AddTexture("GrayNebula", "files/graphics/background/gray_nebula.png");
+            AddTexture("PurpleNebula", "files/graphics/background/purple_nebula.png");
+
             // gui
             AddTexture("Mouse", "files/graphics/gui/pointer.png");
 

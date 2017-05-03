@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
 using SFML.Graphics;
+using SFML.Window;
 
 
 namespace HostileSpace
@@ -27,6 +28,7 @@ namespace HostileSpace
             destination = new RectangleShape(new Vector2f(64, 64));
             destination.Texture = Game.ContentManager.GetTexture("DestinationMarker");
             destination.Scale = new Vector2f(0.5f, 0.5f);
+            destination.Origin = new Vector2f(32, 32);
 
             SetupShortRangeIndicator();
             SetupLongRangeIndicator();
@@ -42,19 +44,45 @@ namespace HostileSpace
             destination.Position = tmp;
         }
 
+        Boolean rightDown = false;
         public override void Update(Time Elapsed)
         {
+            if (!Active)
+                return;
+
+            destination.Rotation += 0.5f;
+            if (destination.Rotation >= 360)
+                destination.Rotation = 0;
+
+            shortRange.Position = Position;
+            longRange.Position = Position;
+
+            if (Mouse.IsButtonPressed(Mouse.Button.Right))
+            {
+                if(rightDown)
+                {
+                    Vector2f tmp = Game.Window.MapPixelToCoords(SFML.Window.Mouse.GetPosition(Game.Window), Game.Camera);
+                    SetDestination(tmp);
+                    destination.Position = tmp;
+                }
+
+                rightDown = true;
+            }
+            else
+                rightDown = false;
+
             base.Update(Elapsed);
         }
 
         public override void Draw(RenderWindow Window)
         {
+            if (!Active)
+                return;
+
             base.Draw(Window);
 
-            Game.Window.SetView(Game.Window.DefaultView);
             Window.Draw(shortRange);
             Window.Draw(longRange);
-            Game.Window.SetView(Game.Camera);
 
             if (!Stopped)
                 Window.Draw(destination);

@@ -34,7 +34,7 @@ namespace HostileSpace
 
         public override void Update(Time Elapsed)
         {
-            if(Game.Settings.Audio)
+            if(Game.GameData.Settings[0].Audio)
             {
                 if (music.Status == SoundStatus.Stopped)
                     music.Play();
