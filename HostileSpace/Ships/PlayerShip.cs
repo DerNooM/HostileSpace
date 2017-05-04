@@ -22,7 +22,7 @@ namespace HostileSpace
             Ship = new RectangleShape(new Vector2f(291, 173));
             Ship.Texture = Game.ContentManager.GetTexture("Ship01");
             Ship.Origin = new Vector2f(Ship.Texture.Size.X / 2, Ship.Texture.Size.Y / 2);
-            Ship.Scale = Ship.Scale / 2;
+            Ship.Scale = Ship.Scale / 3;
             Ship.Position = new Vector2f(Game.Window.Size.X / 2, Game.Window.Size.Y / 2);
 
             destination = new RectangleShape(new Vector2f(64, 64));

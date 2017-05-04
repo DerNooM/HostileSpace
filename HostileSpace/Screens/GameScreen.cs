@@ -10,7 +10,7 @@ namespace HostileSpace.Screens
 {
     class GameScreen : GameComponent
     {
-        List<IGameComponent> ships = new List<IGameComponent>();
+        List<AI> enemies = new List<AI>();
 
         PlayerShip playerShip = null;
 
@@ -20,7 +20,7 @@ namespace HostileSpace.Screens
         {
             playerShip = new PlayerShip(Game);
 
-            ships.Add(new SpaceShip(Game));
+            enemies.Add(new AI(Game, new SpaceShip(Game)));
         }
 
 
@@ -28,9 +28,9 @@ namespace HostileSpace.Screens
         {
             playerShip.Update(Elapsed);
 
-            foreach(IGameComponent ship in ships)
+            foreach(AI enemy in enemies)
             {
-                ship.Update(Elapsed);
+                enemy.Update(playerShip ,Elapsed);
             }
         }
 
@@ -39,9 +39,9 @@ namespace HostileSpace.Screens
         {
             playerShip.Draw(Window);
 
-            foreach (IGameComponent ship in ships)
+            foreach (AI enemy in enemies)
             {
-                ship.Draw(Window);
+                enemy.Draw(Window);
             }
         }
 
@@ -52,9 +52,9 @@ namespace HostileSpace.Screens
 
             playerShip.Activate();
 
-            foreach (IGameComponent ship in ships)
+            foreach (AI enemy in enemies)
             {
-                ship.Activate();
+                enemy.Activate();
             }
         }
 

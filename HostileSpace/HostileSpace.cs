@@ -4,7 +4,7 @@ using SFML.Graphics;
 using SFML.System;
 using HostileSpace.Utils;
 using HostileSpace.Screens;
-
+using HostileSpace.Data;
 
 namespace HostileSpace
 {
@@ -12,8 +12,7 @@ namespace HostileSpace
     {
         RenderWindow window;
 
-        GameData gameData = new GameData();
-
+        Settings settings;
         PlayerData playerData;
 
         FPSCounter fpsCounter;
@@ -35,17 +34,17 @@ namespace HostileSpace
         IGameComponent currentScreen = null;
         
         View camera;
-        Single zoom = 1.0f;
+        Int16 zoom = 0;
 
 
         public HostileSpace()
         {
-            LoadData();
+            LoadSettings();
             LoadPlayerData();
 
             ContextSettings contextSettings = new ContextSettings();
             contextSettings.AntialiasingLevel = 16;       
-            window = new RenderWindow(new VideoMode(gameData.Settings[0].ResolutionX, gameData.Settings[0].ResolutionY), "Hostile Space", Styles.None, contextSettings);
+            window = new RenderWindow(new VideoMode(settings.ResolutionX, settings.ResolutionY), "Hostile Space", Styles.None, contextSettings);
             window.SetMouseCursorVisible(false);
             window.SetVerticalSyncEnabled(false);
 
@@ -59,8 +58,6 @@ namespace HostileSpace
 
             background = new Background(this);
 
-
-
             mainScreen = new MainScreen(this);
             mainScreen.NewGameBTN.ButtonPressed += NewGameBTN_ButtonPressed;
             mainScreen.SettingsBTN.ButtonPressed += SettingsBTN_ButtonPressed;
@@ -71,11 +68,10 @@ namespace HostileSpace
             settingsScreen = new SettingsScreen(this);
             settingsScreen.Back.ButtonPressed += Back_ButtonPressed;
             creditsScreen = new CreditsScreen(this);
-            creditsScreen.Back.ButtonPressed += Back_ButtonPressed1;
+            creditsScreen.Back.ButtonPressed += Back_ButtonPressed;
 
             currentScreen = mainScreen;
             currentScreen.Activate();
-
 
             camera = window.DefaultView;
             input.Keyboard.F12Pressed += Keyboard_F12Pressed;
@@ -83,65 +79,6 @@ namespace HostileSpace
             window.MouseWheelMoved += Window_MouseWheelMoved;
         }
 
-        
-        private void Window_MouseWheelMoved(object sender, MouseWheelEventArgs e)
-        {
-            Console.WriteLine(e.Delta);
-
-            if(e.Delta <= -1)
-            {
-                if (zoom >= 2)
-                    return;
-
-                zoom += 0.1f;
-                camera.Zoom(1.1f);
-            }
-            if (e.Delta >= 1)
-            {
-                if (zoom <= 1.0)
-                    return;
-
-                zoom -= 0.1f;
-                camera.Zoom(0.9f);
-            }
-        }
-
-        private void Back_ButtonPressed1(object sender, EventArgs e)
-        {
-            currentScreen.DeActivate();
-            currentScreen = mainScreen;
-            currentScreen.Activate();
-        }
-
-        private void CreditsBTN_ButtonPressed(object sender, EventArgs e)
-        {
-            currentScreen.DeActivate();
-            currentScreen = creditsScreen;
-            currentScreen.Activate();
-        }
-
-        private void Back_ButtonPressed(object sender, EventArgs e)
-        {
-            currentScreen.DeActivate();
-            currentScreen = mainScreen;
-            currentScreen.Activate();
-
-
-        }
-
-        private void SettingsBTN_ButtonPressed(object sender, EventArgs e)
-        {
-            currentScreen.DeActivate();
-            currentScreen = settingsScreen;
-            currentScreen.Activate();
-        }
-
-        private void NewGameBTN_ButtonPressed(object sender, EventArgs e)
-        {
-            currentScreen.DeActivate();
-            currentScreen = gameScreen;
-            currentScreen.Activate();
-        }
 
         public void Update(Time Elapsed)
         {
@@ -190,19 +127,16 @@ namespace HostileSpace
             Input.Mouse.Draw(window);
         }
 
-        void LoadData()
+        void LoadSettings()
         {
             try
             {
-                gameData.ReadXml("gamedata.xml");
+                settings = Settings.Load("settings.xml");
             }
             catch
             {
-                Console.WriteLine("creating db...");
-                GameData.SettingsRow settings = gameData.Settings.NewSettingsRow();
-                gameData.Settings.AddSettingsRow(settings);
-
-                gameData.WriteXml("gamedata.xml");
+                settings = new Settings();
+                settings.Save("settings.xml");
             }
         }
 
@@ -230,6 +164,34 @@ namespace HostileSpace
             }
         }
 
+        private void Back_ButtonPressed(object sender, EventArgs e)
+        {
+            currentScreen.DeActivate();
+            currentScreen = mainScreen;
+            currentScreen.Activate();
+        }
+
+        private void CreditsBTN_ButtonPressed(object sender, EventArgs e)
+        {
+            currentScreen.DeActivate();
+            currentScreen = creditsScreen;
+            currentScreen.Activate();
+        }
+
+        private void SettingsBTN_ButtonPressed(object sender, EventArgs e)
+        {
+            currentScreen.DeActivate();
+            currentScreen = settingsScreen;
+            currentScreen.Activate();
+        }
+
+        private void NewGameBTN_ButtonPressed(object sender, EventArgs e)
+        {
+            currentScreen.DeActivate();
+            currentScreen = gameScreen;
+            currentScreen.Activate();
+        }
+
         private void Keyboard_F12Pressed(object sender, EventArgs e)
         {
             window.Clear(Color.Black);
@@ -251,29 +213,59 @@ namespace HostileSpace
             Console.WriteLine("screenshot");
         }
 
-        public View Camera
+        private void Window_MouseWheelMoved(object sender, MouseWheelEventArgs e)
         {
-            get { return camera; }
+            if (e.Delta <= -1)
+            {
+                zoom += 1;
+
+                if (zoom > 8)
+                {
+                    zoom = 8;
+                    return;
+                }
+
+                camera.Zoom(1.1f);
+            }
+            if (e.Delta >= 1)
+            {
+                zoom -= 1;
+
+                if (zoom <= 0)
+                {
+                    zoom = 0;
+                    camera.Reset(new FloatRect(camera.Center, new Vector2f(settings.ResolutionX, settings.ResolutionY)));
+                    return;
+                }
+
+                camera.Zoom(0.9f);
+            }
         }
+
 
         public RenderWindow Window
         {
             get { return window; }
         }
 
-        public GameData GameData
+        public View Camera
         {
-            get { return gameData; }
+            get { return camera; }
         }
 
-        public Background Background
+        public Settings Settings
         {
-            get { return background; }
+            get { return settings; }
         }
 
         public PlayerData PlayerData
         {
             get { return playerData; }
+        }
+
+        public Background Background
+        {
+            get { return background; }
         }
 
         public IGameComponent CurrentScreen

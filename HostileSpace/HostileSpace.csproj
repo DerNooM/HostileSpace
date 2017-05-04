@@ -54,11 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameData.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GameData.xsd</DependentUpon>
-    </Compile>
+    <Compile Include="Controller\AI.cs" />
+    <Compile Include="Controller\Player.cs" />
+    <Compile Include="Data\Settings.cs" />
     <Compile Include="GUI\CheckBox.cs" />
     <Compile Include="Utils\MathHelper.cs" />
     <Compile Include="Data\PlayerData.cs" />
@@ -91,17 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="GameData.xsc">
-      <DependentUpon>GameData.xsd</DependentUpon>
-    </None>
-    <None Include="GameData.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>GameData.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="GameData.xss">
-      <DependentUpon>GameData.xsd</DependentUpon>
-    </None>
     <None Include="files\audio\music\DST-RailJet-LongSeamlessLoop.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

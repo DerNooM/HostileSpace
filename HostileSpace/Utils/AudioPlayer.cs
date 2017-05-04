@@ -31,7 +31,7 @@ namespace HostileSpace
 
         public void PlaySound(String Name)
         {
-            if (!Game.GameData.Settings[0].Sound)
+            if (!Game.Settings.Sound)
                 return;
 
             SoundObject tmp = sounds[Name];

@@ -26,6 +26,7 @@ namespace HostileSpace
 
         Single mass = 500;
 
+        SpaceShip target = null;
 
         Boolean stopped = true;
 
@@ -48,11 +49,26 @@ namespace HostileSpace
             }
         }
 
+        public void GetInRange(SpaceShip Target)
+        {
+            if (MathHelper.GetDistance(ship.Position, destination) > ShortRangeDistance)
+            {
+                velocity = (Single)Math.Min(1.0, velocity + (0.5f * Time.FromSeconds(1.0f / 60.0f).AsMilliseconds()) / mass);
+            }
+            else
+            {
+                velocity = (Single)Math.Max(0.2f, velocity - (0.5f * Time.FromSeconds(1.0f / 60.0f).AsMilliseconds()) / mass);
+            }
+
+            direction = Target.Position - ship.Position;
+        }
+
         public override void Update(Time Elapsed)
         {
             if (!alive || !Active)
                 return;
 
+            
             if (MathHelper.GetDistance(ship.Position, destination) < 30)
             {
                 velocity = 0;
@@ -62,6 +78,7 @@ namespace HostileSpace
             else
                 stopped = false;
             
+
             if (MathHelper.GetDistance(ship.Position, destination) > 100)
             {
                 velocity = (Single)Math.Min(1.0, velocity + (0.5f * Elapsed.AsMilliseconds()) / mass);
@@ -71,6 +88,18 @@ namespace HostileSpace
                 velocity = (Single)Math.Max(0.2f, velocity - (0.5f * Elapsed.AsMilliseconds()) / mass);
             }
             
+            
+
+            direction = destination - ship.Position;
+            
+
+
+            rotation = (float)Math.Atan2(direction.Y, direction.X);
+
+            rotation = MathHelper.RadianToDegree(rotation);
+
+            ship.Rotation -= (0.002f * Elapsed.AsMilliseconds()) * MathHelper.ShortestRotation(rotation, ship.Rotation);
+
             if (ship.Rotation >= 360)
             {
                 ship.Rotation = 0;
@@ -80,15 +109,9 @@ namespace HostileSpace
                 ship.Rotation = 0;
             }
 
-            direction = destination - ship.Position;
-
-            rotation = (float)Math.Atan2(direction.Y, direction.X);
-            rotation = MathHelper.RadianToDegree(rotation);
-            ship.Rotation -= (0.002f * Elapsed.AsMilliseconds()) * MathHelper.ShortestRotation(rotation, ship.Rotation);
-
             direction.Y = (Single)Math.Sin(MathHelper.DegreeToRadian(ship.Rotation));
             direction.X = (Single)Math.Cos(MathHelper.DegreeToRadian(ship.Rotation));
-
+            
             ship.Position += direction * velocity * 0.2f * Elapsed.AsMilliseconds();
         }
 
